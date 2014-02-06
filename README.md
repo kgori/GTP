@@ -1,7 +1,7 @@
 GTP
 ===
 
-Megan Owen and Scott Provan's java implementation of their GTP algorithm for calculating the geodesic distance between phylogenetic trees. The original code only allowed for all-all comparisons, this version is modified to allow row-wise comparisons - i.e. the first tree in a file against all other trees. This is activated with the '-r' switch.
+A fork of Megan Owen and Scott Provan's [__java implementation__](http://comet.lehman.cuny.edu/owen/code.html) of their **GTP algorithm** for calculating the geodesic distance between phylogenetic trees, from [__this paper__](http://ieeexplore.ieee.org/xpl/articleDetails.jsp?arnumber=5396323). The original code only allowed for all-all comparisons, this version is modified to allow row-wise comparisons - i.e. the first tree in a file against all other trees. This is activated with the '-r' switch.
 
 Installation
 ------------
