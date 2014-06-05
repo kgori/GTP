@@ -8,12 +8,19 @@ Installation
 
 First compile the sources:
 
-    javac -cf polyAlg/*.java distanceAlg1/*.java
+    javac polyAlg/*.java distanceAlg1/*.java
     
 Then pack the jar file:
 
     jar cfm gtp.jar manifest.txt polyAlg/*.class distanceAlg1/*.class
 
+Or run the Makefile by typing:
+
+    make
+
+You can clean up the compiled classes with:
+
+    make clean
 
 Usage
 -----
