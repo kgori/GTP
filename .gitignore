@@ -4,3 +4,9 @@
 # *.jar
 *.war
 *.ear
+
+# IntelliJ IDE
+*.iml
+.idea/*
+
+output.txt
