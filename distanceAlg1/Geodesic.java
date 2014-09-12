@@ -17,6 +17,7 @@
 
 package distanceAlg1;
 
+import java.io.IOException;
 import java.util.*;
 
 import polyAlg.PolyMain;
@@ -176,7 +177,7 @@ public class Geodesic {
      * @param position
      * @return
      */
-    public static PhyloTree getTreeAt(PhyloTree t1, PhyloTree t2, double position) {
+    public static PhyloTree getTreeAt(PhyloTree t1, PhyloTree t2, double position) throws IOException {
         int lowerRatioIndex = -2;    // the index of the ratio containing all f edges in the tree we want
         // i.e. the index of the ratio with time < position, but such that the next ratio has time >= position
         // if position is in the starting orthant, we don't want any f edges.
@@ -316,12 +317,12 @@ public class Geodesic {
             System.err.println("Error: the two trees do not have the same leaves!");
             System.err.println("First tree's leaves are " + t1.getLeaf2NumMap());
             System.err.println("Second tree's leaves are " + t2.getLeaf2NumMap());
-            System.exit(1);
+            throw new RuntimeException();
         }
 
         if (position < 0 || position > 1) {
             System.err.println("Error:  position " + position + " must be between 0 and 1");
-            System.exit(1);
+            throw new RuntimeException();
         }
 
         // end error checking

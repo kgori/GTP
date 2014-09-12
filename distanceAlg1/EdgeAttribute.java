@@ -16,7 +16,7 @@ public class EdgeAttribute {
         this.vect = vect;
     }
 
-    public EdgeAttribute(String s) {
+    public EdgeAttribute(String s) throws NumberFormatException {
         try {
             // if s is a vector
             if ((s.charAt(0) == '[') && (s.charAt(s.length() - 1) == ']')) {
@@ -38,7 +38,7 @@ public class EdgeAttribute {
             }
         } catch (NumberFormatException e) {
             System.err.println("Error creating new edge attribute: input string does not have double where expected or bracket problem: " + e.getMessage());
-            System.exit(1);
+            throw e;
         }
     }
 
@@ -152,7 +152,7 @@ public class EdgeAttribute {
 
         if (a1.vect.length != a2.vect.length) {
             System.err.println("Error:  vectors different lengths when computing difference of EdgeAttributes " + a1 + " and " + a2);
-            System.exit(1);
+            throw new RuntimeException();
         }
         int diffLength = a1.vect.length;
 
@@ -182,7 +182,7 @@ public class EdgeAttribute {
 
         if (a1.vect.length != a2.vect.length) {
             System.err.println("Error:  vectors different lengths when adding EdgeAttributes " + a1 + " and " + a2);
-            System.exit(1);
+            throw new RuntimeException();
         }
 
 
@@ -226,7 +226,7 @@ public class EdgeAttribute {
 
         if (start.vect.length != target.vect.length) {
             System.err.println("Error calculating point between edge attributes.  Edge attributes are different lenghts: " + start + " and " + target);
-            System.exit(1);
+            throw new RuntimeException();
         }
 
         if (position < 0 || position > 1) {
@@ -289,7 +289,7 @@ public class EdgeAttribute {
     public static EdgeAttribute zeroAttribute(int size) {
         if (size < 1) {
             System.err.println("Error creating zero edge attribute of size " + size + "; invalid size");
-            System.exit(1);
+            throw new RuntimeException();
         }
 
         EdgeAttribute zero = new EdgeAttribute(new double[size]);

@@ -40,8 +40,7 @@ public class Bipartition implements Cloneable {
             if (s.charAt(i) == '1') {
                 partition.set(i);
             } else if (s.charAt(i) != '0') {
-                System.err.println("Error creating bipartition: input string " + s + " should only contain 0s and 1s");
-                System.exit(1);
+                throw new RuntimeException("Error creating bipartition: input string " + s + " should only contain 0s and 1s");
             }
     }
 

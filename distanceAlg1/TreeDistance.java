@@ -125,7 +125,7 @@ public class TreeDistance {
      * resets hash table for divide and conquer
      * XXX: how to deal with multifurcating trees
      */
-    public static Geodesic getGeodesic2(PhyloTree t1, PhyloTree t2, String algorithm, String geoFile) {
+    public static Geodesic getGeodesic2(PhyloTree t1, PhyloTree t2, String algorithm, String geoFile) throws IOException {
         double leafContributionSquared = 0;
         EdgeAttribute[] t1LeafEdgeAttribs = t1.getLeafEdgeAttribs();
         EdgeAttribute[] t2LeafEdgeAttribs = t2.getLeafEdgeAttribs();
@@ -137,7 +137,7 @@ public class TreeDistance {
         for (int i = 0; i < t1.getLeaf2NumMap().size(); i++) {
             if (!(t1.getLeaf2NumMap().get(i).equals(t2.getLeaf2NumMap().get(i)))) {
                 System.out.println("Exiting: Leaves don't match for trees " + t1 + " and " + t2);
-                System.exit(1);
+                throw new RuntimeException();
             }
 
             leafContributionSquared = leafContributionSquared + Math.pow(EdgeAttribute.difference(t1LeafEdgeAttribs[i], t2LeafEdgeAttribs[i]).norm(), 2);
@@ -264,12 +264,9 @@ public class TreeDistance {
                 if (outputStream != null) {
                     outputStream.close();
                 }
-            } catch (FileNotFoundException e) {
-                System.out.println("Error opening or writing to " + geoFile + ": " + e.getMessage());
-                System.exit(1);
             } catch (IOException e) {
                 System.out.println("Error opening or writing to " + geoFile + ": " + e.getMessage());
-                System.exit(1);
+                throw e;
             }
         }
         return geo;
@@ -472,7 +469,7 @@ public class TreeDistance {
                 return getPruned2GeodesicNoCommonEdges(t1, t2);
             } else {
                 System.out.println("" + algorithm + " is an invalid algorithm");
-                System.exit(0);
+                throw new RuntimeException();
             }
         }
 //		System.out.println("At least one common split; edges are " + commonEdges);
@@ -618,7 +615,7 @@ public class TreeDistance {
      * @param algorithm
      * @return
      */
-    public static Geodesic[][] getAllInterTreeGeodesics(PhyloTree[] trees, int numTrees, String algorithm, boolean doubleCheck) {
+    public static Geodesic[][] getAllInterTreeGeodesics(PhyloTree[] trees, int numTrees, String algorithm, boolean doubleCheck) throws IOException {
         Date startTime;
         Date endTime;
         long[][] compTimes = new long[numTrees][numTrees];
@@ -645,7 +642,7 @@ public class TreeDistance {
                 // algorithm just returns a distance
                 else {
                     System.out.println("Unknown algorithm " + algorithm + "; exiting.");
-                    System.exit(0);
+                    throw new RuntimeException();
                 }
             }
         }
@@ -671,7 +668,7 @@ public class TreeDistance {
                     // algorithm just returns a distance
                     else {
                         System.out.println("Unknown algorithm " + algorithm + "; exiting.");
-                        System.exit(0);
+                        throw new RuntimeException();
                     }
                     if (truncate(geos[i][j].getDist(), 10) != truncate(geos[j][i].getDist(), 10)) {
                         System.out.println("***" + algorithm + " distances don't match for trees " + i + " and " + j + "***");
@@ -739,7 +736,7 @@ public class TreeDistance {
 
         if (m == null) {
             System.out.println("The trees " + t1 + " and " + t2 + " do not have the same leaf labels.");
-            System.exit(0);
+            throw new RuntimeException();
         }
 
         getMaxPathSpacesAsRatioSeqs(m, new RatioSequence(), t1.getEdges(), t2.getEdges());
@@ -776,7 +773,7 @@ public class TreeDistance {
 
         if (m == null) {
             System.out.println("The trees " + t1 + " and " + t2 + " do not have the same leaf labels.");
-            System.exit(0);
+            throw new RuntimeException();
         }
 
 //		 the base case is when m contains all the same element
@@ -836,7 +833,7 @@ public class TreeDistance {
 
         if (m == null) {
             System.out.println("The trees " + t1 + " and " + t2 + " do not have the same leaf labels.");
-            System.exit(0);
+            throw new RuntimeException();
         }
 
         // the base case is when m contains all the same element
@@ -932,7 +929,7 @@ public class TreeDistance {
 
         if (m == null) {
             System.out.println("The trees " + t1 + " and " + t2 + " do not have the same leaf labels.");
-            System.exit(0);
+            throw new RuntimeException();
         }
 
         // the base case is when m contains all the same element
@@ -1635,7 +1632,7 @@ public class TreeDistance {
      * @param inFileName
      * @return
      */
-    public static PhyloTree[] readInTreesFromFile(String inFileName) {
+    public static PhyloTree[] readInTreesFromFile(String inFileName) throws IOException {
         int numTrees = 0;  // count the number of trees read in
         Vector<String> stringTrees = new Vector<String>();
 
@@ -1656,12 +1653,9 @@ public class TreeDistance {
             if (inputStream != null) {
                 inputStream.close();
             }
-        } catch (FileNotFoundException e) {
-            System.out.println("Error opening or reading from " + inFileName + ": " + e.getMessage());
-            System.exit(1);
         } catch (IOException e) {
             System.out.println("Error opening or reading from " + inFileName + ": " + e.getMessage());
-            System.exit(1);
+            throw e;
         }
 
 
@@ -1682,7 +1676,7 @@ public class TreeDistance {
      * Open file fileName, reads in the trees, and outputs the distances computed by algorithm.
      * Assumes first line of file is number of trees, and then one tree per line.
      */
-    public static void computeAllInterTreeGeodesicsFromFile(String inFileName, String outFileName, String algorithm, boolean doubleCheck) {
+    public static void computeAllInterTreeGeodesicsFromFile(String inFileName, String outFileName, String algorithm, boolean doubleCheck) throws IOException {
 
 
         PhyloTree[] trees = readInTreesFromFile(inFileName);
@@ -1690,7 +1684,7 @@ public class TreeDistance {
 
         if (numTrees < 2) {
             System.out.println("Error:  tree file must contain at least 2 trees");
-            System.exit(1);
+            throw new RuntimeException();
         }
 
         if (verbose >= 1) {
@@ -1719,12 +1713,9 @@ public class TreeDistance {
             if (outputStream != null) {
                 outputStream.close();
             }
-        } catch (FileNotFoundException e) {
-            System.out.println("Error opening or writing to " + outFileName + ": " + e.getMessage());
-            System.exit(1);
         } catch (IOException e) {
             System.out.println("Error opening or writing to " + outFileName + ": " + e.getMessage());
-            System.exit(1);
+            throw e;
         }
     }
 
@@ -1737,7 +1728,7 @@ public class TreeDistance {
      * @param alg1
      * @param alg2
      */
-    public static void compareAlgorithms(PhyloTree[] trees, int numTrees, String alg1, String alg2) {
+    public static void compareAlgorithms(PhyloTree[] trees, int numTrees, String alg1, String alg2) throws IOException {
 
         Date startTime, endTime;
         long alg1Time, alg2Time;
@@ -1749,7 +1740,7 @@ public class TreeDistance {
         // check input algorithms are valid
         if (!(alg1.equals("divide") || alg1.equals("DivideAndConquerRS") || alg1.equals("ConjBothEnds") || alg1.equals("dynamic")) || !(alg2.equals("divide") || alg2.equals("ConjBothEnds") || alg2.equals("dynamic"))) {
             System.out.println("Error:  either " + alg1 + " or " + alg2 + " is an invalid algorithm.");
-            System.exit(1);
+            throw new RuntimeException();
         }
 
         for (int i = 0; i < numTrees; i++) {
@@ -1920,7 +1911,12 @@ public class TreeDistance {
 			System.exit(0);
 		}*/
 
-        computeAllInterTreeGeodesicsFromFile(treeFile, outFile, algorithm, doubleCheck);
+        try {
+            computeAllInterTreeGeodesicsFromFile(treeFile, outFile, algorithm, doubleCheck);
+        } catch (IOException e) {
+            System.err.println("IO Error detected");
+            System.exit(1);
+        }
 
         System.exit(0);
 

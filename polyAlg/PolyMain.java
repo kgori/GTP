@@ -204,7 +204,7 @@ public class PolyMain {
      * @param inFileName
      * @return
      */
-    public static PhyloTree[] readInTreesFromFile(String inFileName, boolean rooted) {
+    public static PhyloTree[] readInTreesFromFile(String inFileName, boolean rooted) throws IOException, UnsupportedOperationException {
         int numTrees = 0;  // count the number of trees read in
         boolean nexus = false;
         Vector<String> stringTrees = new Vector<String>();
@@ -220,12 +220,9 @@ public class PolyMain {
                 nexus = true;
             }
             inputStream.close();
-        } catch (FileNotFoundException e) {
-            System.out.println("Error opening or reading from " + inFileName + ": " + e.getMessage());
-            System.exit(1);
         } catch (IOException e) {
             System.out.println("Error opening or reading from " + inFileName + ": " + e.getMessage());
-            System.exit(1);
+            throw e;
         }
 
         // File is not in NEXUS format.  Assume it is a list of trees in Newick format,
@@ -237,6 +234,7 @@ public class PolyMain {
                 String l;
                 while ((l = inputStream.readLine()) != null) {
                     // check for blank lines
+                    l = l.trim(); // trim leading and trailing whitespace
                     if (!(l.equals("")) && !(l.equals("\n"))) {
                         // check if the line begins tree_name = Newick_string, and if so, remove it
                         l = l.substring(l.indexOf("("));
@@ -247,16 +245,12 @@ public class PolyMain {
                 if (inputStream != null) {
                     inputStream.close();
                 }
-            } catch (FileNotFoundException e) {
-                System.out.println("Error opening or reading from " + inFileName + ": " + e.getMessage());
-                System.exit(1);
             } catch (IOException e) {
                 System.out.println("Error opening or reading from " + inFileName + ": " + e.getMessage());
-                System.exit(1);
+                throw e;
             }
         } else {
-            System.out.println("Nexus format not supported.");
-            System.exit(0);
+            throw new UnsupportedOperationException("Nexus format not supported.");
         }
 
 //    // file is in Nexus format
@@ -334,7 +328,7 @@ public class PolyMain {
      * Pass in null for geoFile to not write to a file.
      * XXX: how to deal with multifurcating trees
      */
-    public static Geodesic getGeodesic(PhyloTree t1, PhyloTree t2, String geoFile) {
+    public static Geodesic getGeodesic(PhyloTree t1, PhyloTree t2, String geoFile) throws IOException, UnsupportedOperationException {
         double leafContributionSquared = 0;
         EdgeAttribute[] t1LeafEdgeAttribs = t1.getLeafEdgeAttribs();
         EdgeAttribute[] t2LeafEdgeAttribs = t2.getLeafEdgeAttribs();
@@ -345,14 +339,14 @@ public class PolyMain {
         // get the leaf contributions
         for (int i = 0; i < t1.getLeaf2NumMap().size(); i++) {
             if (!(t1.getLeaf2NumMap().get(i).equals(t2.getLeaf2NumMap().get(i)))) {
-                System.out.println("Error getting geodesic: trees do not have the same sets of leaves");
-                System.out.println("Starting tree leaves: " + t1.getLeaf2NumMap());
-                System.out.println("Target tree leaves: " + t2.getLeaf2NumMap());
+                System.err.println("Error getting geodesic: trees do not have the same sets of leaves");
+                System.err.println("Starting tree leaves: " + t1.getLeaf2NumMap());
+                System.err.println("Target tree leaves: " + t2.getLeaf2NumMap());
 
-                System.out.println("Starting tree: " + t1.getNewick(true));
-                System.out.println("Target tree: " + t2.getNewick(true));
+                System.err.println("Starting tree: " + t1.getNewick(true));
+                System.err.println("Target tree: " + t2.getNewick(true));
 
-                System.exit(1);
+                throw new UnsupportedOperationException("Error getting geodesic: trees do not have the same sets of leaves");
             }
 //		System.out.println("leaf: " + t1.getLeaf2NumMap().get(i) + " | " + t1LeafEdgeLengths[i] + " - " + t2LeafEdgeLengths[i] + "| = " + (t1LeafEdgeLengths[i] - t2LeafEdgeLengths[i]) );
 
@@ -475,12 +469,9 @@ public class PolyMain {
                 if (outputStream != null) {
                     outputStream.close();
                 }
-            } catch (FileNotFoundException e) {
-                System.out.println("Error opening or writing to " + geoFile + ": " + e.getMessage());
-                System.exit(1);
             } catch (IOException e) {
                 System.out.println("Error opening or writing to " + geoFile + ": " + e.getMessage());
-                System.exit(1);
+                throw e;
             }
         }
         return geo;
@@ -605,7 +596,7 @@ public class PolyMain {
      * @param algorithm
      * @return
      */
-    public static Geodesic[][] getAllInterTreeGeodesics(PhyloTree[] trees, boolean doubleCheck) {
+    public static Geodesic[][] getAllInterTreeGeodesics(PhyloTree[] trees, boolean doubleCheck) throws IOException {
         Date startTime;
         Date endTime;
         int numTrees = trees.length;
@@ -677,7 +668,7 @@ public class PolyMain {
      * Open file fileName, reads in the trees, and outputs the distances computed by the polynomial distance algorithm.
      * Assumes first line of file is number of trees, and then one tree per line.
      */
-    public static void computeAllInterTreeGeodesicsFromFile(String inFileName, String outFileName, boolean doubleCheck, boolean rooted) {
+    public static void computeAllInterTreeGeodesicsFromFile(String inFileName, String outFileName, boolean doubleCheck, boolean rooted) throws IOException {
 
 
         PhyloTree[] trees = readInTreesFromFile(inFileName, rooted);
@@ -708,16 +699,13 @@ public class PolyMain {
             if (outputStream != null) {
                 outputStream.close();
             }
-        } catch (FileNotFoundException e) {
-            System.out.println("Error opening or writing to " + outFileName + ": " + e.getMessage());
-            System.exit(1);
         } catch (IOException e) {
             System.out.println("Error opening or writing to " + outFileName + ": " + e.getMessage());
-            System.exit(1);
+            throw e;
         }
     }
 
-    public static Geodesic[] getAllRowGeodesics(PhyloTree[] trees, int row) {
+    public static Geodesic[] getAllRowGeodesics(PhyloTree[] trees, int row) throws IOException {
 
         int numTrees = trees.length;
         double[] dists = new double[numTrees];
@@ -732,7 +720,7 @@ public class PolyMain {
         return geos;
     }
 
-    public static void computeAllRowGeodesicsFromFile(String inFileName, String outFileName, boolean rooted, int row) {
+    public static void computeAllRowGeodesicsFromFile(String inFileName, String outFileName, boolean rooted, int row) throws IOException, IndexOutOfBoundsException {
 
         PhyloTree[] trees = readInTreesFromFile(inFileName, rooted);
         int numTrees = trees.length;
@@ -740,8 +728,7 @@ public class PolyMain {
             System.out.println("" + numTrees + " trees read in from " + inFileName);
         }
         if (row > numTrees - 1) {
-            System.out.println("Row value " + row + " is too high for " + numTrees + " trees (0-based numbering)");
-            System.exit(1);
+            throw new IndexOutOfBoundsException("Row value " + row + " is too high for " + numTrees + " trees (0-based numbering)");
         }
         Geodesic[] geos = getAllRowGeodesics(trees, row);
 
@@ -760,12 +747,9 @@ public class PolyMain {
             if (outputStream != null) {
                 outputStream.close();
             }
-        } catch (FileNotFoundException e) {
-            System.out.println("Error opening or writing to " + outFileName + ": " + e.getMessage());
-            System.exit(1);
         } catch (IOException e) {
             System.out.println("Error opening or writing to " + outFileName + ": " + e.getMessage());
-            System.exit(1);
+            throw e;
         }
     }
 
@@ -789,7 +773,7 @@ public class PolyMain {
     /**
      * @param args
      */
-    public static void main(String[] args) {
+    public static void main(String[] args) throws IOException {
         String treeFile = "";
         String outFile = "output.txt"; // default
         boolean doubleCheck = false;
@@ -903,7 +887,7 @@ public class PolyMain {
      * @param treeFile
      * @param outFile
      */
-    public static PhyloTree getMinLabelling(PhyloTree tree1, PhyloTree tree2, String outFile) {
+    public static PhyloTree getMinLabelling(PhyloTree tree1, PhyloTree tree2, String outFile) throws IOException {
         int numIter = 100;
         double potentialGeo;
         PhyloTree potentialTree;

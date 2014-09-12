@@ -17,6 +17,7 @@
 
 package distanceAlg1;
 
+import java.io.IOException;
 import java.util.*;
 
 import polyAlg.*;
@@ -94,7 +95,7 @@ public class PhyloTree {
      *
      * @param t representation of a tree in Newick standard.
      */
-    public PhyloTree(String t, boolean rooted) {
+    public PhyloTree(String t, boolean rooted) throws StringIndexOutOfBoundsException {
         int leafNum = 0;
 
         LinkedList<PhyloTreeEdge> queue = new LinkedList<PhyloTreeEdge>();   // queue for keeping track of edges we are still adding leaves to
@@ -129,12 +130,12 @@ public class PhyloTree {
             }
             if (bracketCount < 0) {
                 System.err.println("Error reading in tree:  bracket problem in Newick string " + newick);
-                System.exit(1);
+                throw new RuntimeException();
             }
         }
         if (bracketCount != 0) {
             System.err.println("Error reading in tree: uneven number of brackets in Newick string " + newick);
-            System.exit(1);
+            throw new RuntimeException();
         }
 
 
@@ -198,7 +199,7 @@ public class PhyloTree {
         }    //try
         catch (StringIndexOutOfBoundsException e) {
             System.err.println("Error reading in tree:  invalid Newick string: (" + t + ");");
-            System.exit(1);
+            throw e;
         }
 
         // if tree is really unrooted, reroot so that the last leaf in leaf2NumMap is the root
@@ -349,7 +350,7 @@ public class PhyloTree {
             System.out.println("Error: the two trees do not have the same leaves!");
             System.out.println("First tree's leaves are " + t1.getLeaf2NumMap());
             System.out.println("Second tree's leaves are " + t2.getLeaf2NumMap());
-            System.exit(1);
+            throw new RuntimeException();
         }
 
         for (PhyloTreeEdge e1 : t1.edges) {
@@ -393,7 +394,7 @@ public class PhyloTree {
             System.out.println("Error: the two trees do not have the same leaves!");
             System.out.println("First tree's leaves are " + this.getLeaf2NumMap());
             System.out.println("Second tree's leaves are " + t.getLeaf2NumMap());
-            System.exit(1);
+            throw new RuntimeException();
         }
 
         for (int i = 0; i < this.edges.size(); i++) {
@@ -694,7 +695,7 @@ public class PhyloTree {
      * @param t
      * @return
      */
-    public boolean approxEquals(PhyloTree t, Double epsilon) {
+    public boolean approxEquals(PhyloTree t, Double epsilon) throws IOException {
         if (this == null || t == null) {
             return false;
         }
@@ -916,7 +917,7 @@ public class PhyloTree {
      * @param geo
      * @return
      */
-    public PhyloTree projectToGeo(PhyloTree t1, PhyloTree t2, double epsilon) {
+    public PhyloTree projectToGeo(PhyloTree t1, PhyloTree t2, double epsilon) throws IOException {
         double rightIndex = 1;
         double leftIndex = 0;
         double middleIndex = 0.5;
@@ -976,7 +977,7 @@ public class PhyloTree {
             } else {
                 // there is a problem
                 System.err.println("Error projecting tree onto geodesic: illegal ordering in line search");
-                System.exit(1);
+                throw new RuntimeException();
             }
         } // end while
         middleIndex = (rightIndex - leftIndex) / 2 + leftIndex;
