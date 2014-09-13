@@ -330,7 +330,6 @@ public class PolyMain {
     }
 
     public static double getEuclideanDistance(PhyloTree tree1, PhyloTree tree2) {
-        Vector<Double> edgeLengthDiffs = new Vector<Double>();
         double euc_value = 0;
 
         // Collect edges-in-common and edges-not-in-common...
@@ -343,21 +342,16 @@ public class PolyMain {
 
         // Collect length differences for internal edges...
         for (PhyloTreeEdge pte : eic) {
-            edgeLengthDiffs.add(pte.getLength());
+            euc_value += Math.pow(pte.getLength(), 2);
         }
 
         for (PhyloTreeEdge pte : enic) {
-            edgeLengthDiffs.add(pte.getLength());
+            euc_value += Math.pow(pte.getLength(), 2);
         }
 
         // ... and leaves
         for (int i=0; i < leaves1.length ; i++) {
-            edgeLengthDiffs.add(Math.abs(leaves1[i].norm() - leaves2[i].norm()));
-        }
-
-        // do euclidean sum
-        for (int i = 0; i < edgeLengthDiffs.size(); i++) {
-            euc_value += Math.pow(edgeLengthDiffs.get(i), 2);
+            euc_value += Math.pow(leaves1[i].norm() - leaves2[i].norm(), 2);
         }
 
         return Math.sqrt(euc_value);
