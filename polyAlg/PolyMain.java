@@ -18,11 +18,11 @@ package polyAlg;
 
 
 import java.io.BufferedReader;
-import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.lang.Math;
 import java.util.Date;
 import java.util.Random;
 import java.util.Vector;
@@ -319,6 +319,48 @@ public class PolyMain {
             }
         }
         return trees;
+    }
+
+    public static double getRobinsonFoulds(PhyloTree tree1, PhyloTree tree2, boolean normalize) {
+        Vector<PhyloTreeEdge> enic = tree1.getEdgesNotInCommonWith(tree2);
+        enic.addAll(tree2.getEdgesNotInCommonWith(tree1));
+        double rf_value = enic.size();
+        if (normalize) rf_value /= tree1.numEdges() + tree2.numEdges();
+        return rf_value;
+    }
+
+    public static double getEuclideanDistance(PhyloTree tree1, PhyloTree tree2) {
+        Vector<Double> edgeLengthDiffs = new Vector<Double>();
+        double euc_value = 0;
+
+        // Collect edges-in-common and edges-not-in-common...
+        Vector<PhyloTreeEdge> eic = PhyloTree.getCommonEdges(tree1, tree2);
+        Vector<PhyloTreeEdge> enic = tree1.getEdgesNotInCommonWith(tree2);
+        enic.addAll(tree2.getEdgesNotInCommonWith(tree1));
+        // ... and leaves
+        EdgeAttribute[] leaves1 = tree1.getLeafEdgeAttribs();
+        EdgeAttribute[] leaves2 = tree2.getLeafEdgeAttribs(); // Assuming these are the same
+
+        // Collect length differences for internal edges...
+        for (PhyloTreeEdge pte : eic) {
+            edgeLengthDiffs.add(pte.getLength());
+        }
+
+        for (PhyloTreeEdge pte : enic) {
+            edgeLengthDiffs.add(pte.getLength());
+        }
+
+        // ... and leaves
+        for (int i=0; i < leaves1.length ; i++) {
+            edgeLengthDiffs.add(Math.abs(leaves1[i].norm() - leaves2[i].norm()));
+        }
+
+        // do euclidean sum
+        for (int i = 0; i < edgeLengthDiffs.size(); i++) {
+            euc_value += Math.pow(edgeLengthDiffs.get(i), 2);
+        }
+
+        return Math.sqrt(euc_value);
     }
 
     /**

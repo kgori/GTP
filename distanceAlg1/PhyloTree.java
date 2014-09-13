@@ -413,7 +413,6 @@ public class PhyloTree {
             }
         }
 
-
         return notCommonEdges;
     }
 
