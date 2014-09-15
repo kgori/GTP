@@ -276,14 +276,23 @@ public class PhyloTree {
      */
     public void normalize() {
         double vecLength = getDistanceFromOrigin();
+        normalize(vecLength);
+    }
 
+    private void normalize(double constant) {
         // divide by the length of the split length vector to normalize
         for (int i = 0; i < leafEdgeAttribs.length; i++) {
-            leafEdgeAttribs[i].scaleBy(1.0 / vecLength);
+            leafEdgeAttribs[i].scaleBy(1.0 / constant);
         }
         for (int i = 0; i < edges.size(); i++) {
-            edges.get(i).getAttribute().scaleBy(1.0 / vecLength);
+            edges.get(i).getAttribute().scaleBy(1.0 / constant);
         }
+    }
+
+    public void normalize(PhyloTree other) {
+        double combinedVecLength = getDistanceFromOrigin() + other.getDistanceFromOrigin();
+        normalize(combinedVecLength);
+        other.normalize(combinedVecLength);
     }
 
     public int numLeaves() {
@@ -771,14 +780,14 @@ public class PhyloTree {
         this.leafEdgeAttribs = leafEdgeAttribs;
     }
 
-    public String getNewick(Boolean branchLengths) {
+    public String getNewick(boolean branchLengths) {
         String newNewick = "";
         Vector<String> strPieces = new Vector<String>();    // stores the pieces of the Newick format constructed so far
         Vector<PhyloTreeEdge> corrEdges = new Vector<PhyloTreeEdge>();    // stores the top split for each piece of Newick constructed so far
 
-        if (newick != null) {
-            return newick;
-        }
+        // if (newick != null) {
+        //     return newick;
+        // }
         // otherwise we have to figure out the Newick representation for this tree
         if (edges.size() == 0) {
             // we have the star tree

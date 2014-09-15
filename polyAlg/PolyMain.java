@@ -329,7 +329,7 @@ public class PolyMain {
         return rf_value;
     }
 
-    public static double getEuclideanDistance(PhyloTree tree1, PhyloTree tree2) {
+    public static double getEuclideanDistance(PhyloTree tree1, PhyloTree tree2, boolean normalize) {
         double euc_value = 0;
 
         // Collect edges-in-common and edges-not-in-common...
@@ -354,7 +354,14 @@ public class PolyMain {
             euc_value += Math.pow(leaves1[i].norm() - leaves2[i].norm(), 2);
         }
 
+        if (normalize) return Math.sqrt(euc_value) / (tree1.getDistanceFromOrigin() + tree2.getDistanceFromOrigin());
         return Math.sqrt(euc_value);
+    }
+
+    public static double getGeodesicDistance(PhyloTree tree1, PhyloTree tree2, boolean normalize) throws IOException {
+        double distance = getGeodesic(tree1, tree2, null).getDist();
+        if (normalize) return distance / (tree1.getDistanceFromOrigin() + tree2.getDistanceFromOrigin());
+        return distance;
     }
 
     /**
@@ -364,7 +371,7 @@ public class PolyMain {
      * Pass in null for geoFile to not write to a file.
      * XXX: how to deal with multifurcating trees
      */
-    public static Geodesic getGeodesic(PhyloTree t1, PhyloTree t2, String geoFile) throws IOException, UnsupportedOperationException {
+    public static Geodesic getGeodesic(PhyloTree t1, PhyloTree t2, String geoFile) throws IOException {
         double leafContributionSquared = 0;
         EdgeAttribute[] t1LeafEdgeAttribs = t1.getLeafEdgeAttribs();
         EdgeAttribute[] t2LeafEdgeAttribs = t2.getLeafEdgeAttribs();
