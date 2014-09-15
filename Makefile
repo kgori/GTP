@@ -1,9 +1,14 @@
-all: build
+objs = distanceAlg1/*.java polyAlg/*.java
+classes = $(objs:java=class)
+
+all: build jar
 
 build:
-	javac polyAlg/*.java distanceAlg1/*.java
-	jar cfm gtp.jar manifest.txt polyAlg/*.class distanceAlg1/*.class
+	javac $(objs)
+
+jar:
+	jar cfm gtp.jar manifest.txt $(classes)
 
 clean:
-	@if [[ -f polyAlg/*.class ]]; then rm polyAlg/*.class; fi
-	@if [[ -f distanceAlg1/*.class ]]; then rm distanceAlg1/*.class; fi
+	@rm -f $(classes)
+	@rm -f gtp.jar
