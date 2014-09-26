@@ -336,6 +336,22 @@ public class PhyloTree {
         return Math.sqrt(dist);
     }
 
+    /**
+     * Returns the sum of the tree's edge lengths
+     */
+    public double getBranchLengthSum() {
+        double sum = 0;
+        for (int i = 0; i < edges.size(); i++) {
+            sum += edges.get(i).getLength();
+        }
+
+        for (int i = 0; i < leafEdgeAttribs.length; i++) {
+            sum += leafEdgeAttribs[i].norm();
+        }
+
+        return sum;
+    }
+
 
     /**
      * Returns a vector containing edges with the same partition in t1 and t2.
