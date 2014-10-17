@@ -17,10 +17,10 @@
 
 package distanceAlg1;
 
+import polyAlg.*;
+
 import java.io.IOException;
 import java.util.*;
-
-import polyAlg.*;
 
 /* XXX: (general problems)
 1) we need a method to convert trees without the same leaf2NumMap to having the same one, if possible.
@@ -62,23 +62,6 @@ public class PhyloTree {
         if (t.newick != null) {
             this.newick = new String(t.newick);
         }
-    }
-
-
-    private void setLeaf2NumMapFromNewick() {
-        // go through the string and pull out all the leaf labels:  any string between '(' and ':' or ',' and ':'
-        int i = 0;
-        while (i < newick.length()) {
-            // however, the first character might be the beginning of a leaf label
-            if ((newick.charAt(i) == '(' || newick.charAt(i) == ',') && (newick.charAt(i + 1) != '(')) {
-                leaf2NumMap.add(newick.substring(i + 1, newick.substring(i).indexOf(":") + i));
-                i = nextIndex(newick, i, ",)");
-            } else {
-                i++;
-            }
-        }
-        // sort the elements of leaf2NumMap
-        Collections.sort(leaf2NumMap);
     }
 
 
@@ -219,140 +202,6 @@ public class PhyloTree {
 
     } // constructor
 
-
-    // Getters and Setters
-    public Vector<PhyloTreeEdge> getEdges() {
-        return edges;
-    }
-
-    /**
-     * Returns the split at position i in the split vector
-     *
-     * @param i
-     * @return
-     */
-    public PhyloTreeEdge getEdge(int i) {
-        return edges.get(i);
-    }
-
-    public void setEdges(Vector<PhyloTreeEdge> edges) {
-        this.edges = edges;
-    }
-
-
-    public Vector<String> getLeaf2NumMap() {
-        return leaf2NumMap;
-    }
-
-    public EdgeAttribute getAttribOfSplit(Bipartition edge) {
-        Iterator<PhyloTreeEdge> edgesIter = edges.iterator();
-        while (edgesIter.hasNext()) {
-            PhyloTreeEdge e = (PhyloTreeEdge) edgesIter.next();
-            if (e.sameBipartition(edge)) {
-                return e.getAttribute();
-            }
-        }
-        return null;
-    }
-
-    /**
-     * Returns a vector containing the splits (as Bipartitions) corresponding to the edges of this tree.
-     *
-     * @return
-     */
-    public Vector<Bipartition> getSplits() {
-        Vector<Bipartition> splits = new Vector<Bipartition>();
-
-        for (int i = 0; i < edges.size(); i++) {
-            splits.add(getEdge(i).asSplit());
-        }
-
-        return splits;
-    }
-
-
-    /* * Normalizes so that the vector of all edges (both internal and ones ending in leaves) has length 1.
-     *
-     */
-    public void normalize() {
-        double vecLength = getDistanceFromOrigin();
-        normalize(vecLength);
-    }
-
-    private void normalize(double constant) {
-        // divide by the length of the split length vector to normalize
-        for (int i = 0; i < leafEdgeAttribs.length; i++) {
-            leafEdgeAttribs[i].scaleBy(1.0 / constant);
-        }
-        for (int i = 0; i < edges.size(); i++) {
-            edges.get(i).getAttribute().scaleBy(1.0 / constant);
-        }
-    }
-
-    public void normalize(PhyloTree other) {
-        double combinedVecLength = getDistanceFromOrigin() + other.getDistanceFromOrigin();
-        normalize(combinedVecLength);
-        other.normalize(combinedVecLength);
-    }
-
-    public int numLeaves() {
-        return leaf2NumMap.size();
-    }
-
-    public void setLeaf2NumMap(Vector<String> leaf2NumMap) {
-        this.leaf2NumMap = leaf2NumMap;
-    }
-
-
-    /**
-     * Returns the distance from this tree to the origin of tree space (i.e. includes leaf edges).
-     *
-     * @return
-     */
-    public double getDistanceFromOrigin() {
-        double dist = 0;
-        for (int i = 0; i < edges.size(); i++) {
-            dist = dist + Math.pow(edges.get(i).getLength(), 2);
-        }
-
-        for (int i = 0; i < leafEdgeAttribs.length; i++) {
-            dist = dist + Math.pow(leafEdgeAttribs[i].norm(), 2);
-        }
-
-        return Math.sqrt(dist);
-    }
-
-    /**
-     * Returns the distance from this tree to the origin of tree space \ leaf space.  (i.e. doesn't include leaves)
-     *
-     * @return
-     */
-    public double getDistanceFromOriginNoLeaves() {
-        double dist = 0;
-        for (int i = 0; i < edges.size(); i++) {
-            dist = dist + Math.pow(edges.get(i).getLength(), 2);
-        }
-
-        return Math.sqrt(dist);
-    }
-
-    /**
-     * Returns the sum of the tree's edge lengths
-     */
-    public double getBranchLengthSum() {
-        double sum = 0;
-        for (int i = 0; i < edges.size(); i++) {
-            sum += edges.get(i).getLength();
-        }
-
-        for (int i = 0; i < leafEdgeAttribs.length; i++) {
-            sum += leafEdgeAttribs[i].norm();
-        }
-
-        return sum;
-    }
-
-
     /**
      * Returns a vector containing edges with the same partition in t1 and t2.
      * If t1 and t2 do not have the same leaf2NumMap, then returns null.
@@ -406,6 +255,204 @@ public class PhyloTree {
     }
 
     /**
+     * Returns the smallest index in a string t after position i, at which one of the characters in s is located.
+     *
+     * @param i
+     * @param s
+     * @return t.length() if no character in s is located after position i in t; otherwise return the min index
+     */
+    public static int nextIndex(String t, int i, String s) {
+        int minIndex = t.length();
+        int tempIndex = -1;
+
+        for (int j = 0; j < s.length(); j++) {
+            tempIndex = t.substring(i + 1).indexOf(s.charAt(j));
+            if ((tempIndex != -1) && (tempIndex + i + 1 < minIndex)) {
+                minIndex = tempIndex + i + 1;
+            }
+        }
+        return minIndex;
+    }
+
+    // XXX for now this is the testing procedure
+    public static void main(String args[]) {
+        PhyloTree t1 = new PhyloTree("((A:0.1,B:0.2):1,(C:0.3,D:0.4):2)", true);
+        // should produce:  [1.0 11, 2.0 1100]
+        System.out.println("Edges of tree 1 (length, followed by leaves as 1's): " + t1.getEdges().toString());
+
+        PhyloTree t2 = new PhyloTree("(((B:0.1,A:0.2):1,C:0.3):2,(D:0.4,E:0.5):3)", true);
+        // should produce: [1.0 11, 2.0 111, 3.0 11000]
+        System.out.println("Edges of tree 2: " + t2.getEdges().toString());
+
+        // has the same leaf2NumMap as t2 and a common split
+        PhyloTree t3 = new PhyloTree("((A:0.1,B:0.2):1,(C:0.3,(D:0.4,E:0.5):2):3)", true);
+        // should produce [1.0 11, 2.0 11100, 3.0 11000]
+        System.out.println("Edges of tree 3: " + t3.getEdges().toString());
+
+        System.out.println("common edges of t2 and t3: " + getCommonEdges(t2, t3));
+
+        // should have no common edges with t2
+        PhyloTree t4 = new PhyloTree("((A:0,C:0):1,(D:0,(B:0,E:0):2):3)", true);
+        System.out.println("Edges of tree 4:" + t4.getEdges().toString());
+        System.out.println("1s indicate edges in tree 4 crossed by that split in tree2: " + t2.getCrossingsWith(t4));
+        System.out.println("1s indicate edges in tree 1 crossed by that split in tree 4: " + t1.getCrossingsWith(t4));
+
+        PhyloTree triTop = new PhyloTree("(((A:0,B:0):1,(C:0,D:0):2):3,E:0)", true);
+        System.out.println("Edges of tree TriTop: " + triTop.getEdges());
+        PhyloTree triBot = new PhyloTree("(((D:0,E:0):1,(C:0,B:0):2):3,A:0)", true);
+        System.out.println("1s indicate edgdes in tree triBot crossed by that split in tree triTop:" + triBot.getCrossingsWith(triTop));
+        PhyloTree noCommonSortingWithTriTop = new PhyloTree("(((A:0,C:0):1,E:0):2,(B:0,D:0):3)", true);
+        System.out.println("Edges of tree noCommonSortingWithTriTop: " + noCommonSortingWithTriTop.getEdges());
+        System.out.println("1s indicate edges in tree triTop crossed by that split in tree noCommonSortingWithTriTop: " +
+                noCommonSortingWithTriTop.getCrossingsWith(triTop));
+    }
+
+    private void setLeaf2NumMapFromNewick() {
+        // go through the string and pull out all the leaf labels:  any string between '(' and ':' or ',' and ':'
+        int i = 0;
+        while (i < newick.length()) {
+            // however, the first character might be the beginning of a leaf label
+            if ((newick.charAt(i) == '(' || newick.charAt(i) == ',') && (newick.charAt(i + 1) != '(')) {
+                leaf2NumMap.add(newick.substring(i + 1, newick.substring(i).indexOf(":") + i));
+                i = nextIndex(newick, i, ",)");
+            } else {
+                i++;
+            }
+        }
+        // sort the elements of leaf2NumMap
+        Collections.sort(leaf2NumMap);
+    }
+
+    // Getters and Setters
+    public Vector<PhyloTreeEdge> getEdges() {
+        return edges;
+    }
+
+    public void setEdges(Vector<PhyloTreeEdge> edges) {
+        this.edges = edges;
+    }
+
+    /**
+     * Returns the split at position i in the split vector
+     *
+     * @param i
+     * @return
+     */
+    public PhyloTreeEdge getEdge(int i) {
+        return edges.get(i);
+    }
+
+    public Vector<String> getLeaf2NumMap() {
+        return leaf2NumMap;
+    }
+
+    public void setLeaf2NumMap(Vector<String> leaf2NumMap) {
+        this.leaf2NumMap = leaf2NumMap;
+    }
+
+    public EdgeAttribute getAttribOfSplit(Bipartition edge) {
+        Iterator<PhyloTreeEdge> edgesIter = edges.iterator();
+        while (edgesIter.hasNext()) {
+            PhyloTreeEdge e = (PhyloTreeEdge) edgesIter.next();
+            if (e.sameBipartition(edge)) {
+                return e.getAttribute();
+            }
+        }
+        return null;
+    }
+
+    /**
+     * Returns a vector containing the splits (as Bipartitions) corresponding to the edges of this tree.
+     *
+     * @return
+     */
+    public Vector<Bipartition> getSplits() {
+        Vector<Bipartition> splits = new Vector<Bipartition>();
+
+        for (int i = 0; i < edges.size(); i++) {
+            splits.add(getEdge(i).asSplit());
+        }
+
+        return splits;
+    }
+
+    /* * Normalizes so that the vector of all edges (both internal and ones ending in leaves) has length 1.
+     *
+     */
+    public void normalize() {
+        double vecLength = getDistanceFromOrigin();
+        normalize(vecLength);
+    }
+
+    private void normalize(double constant) {
+        // divide by the length of the split length vector to normalize
+        for (int i = 0; i < leafEdgeAttribs.length; i++) {
+            leafEdgeAttribs[i].scaleBy(1.0 / constant);
+        }
+        for (int i = 0; i < edges.size(); i++) {
+            edges.get(i).getAttribute().scaleBy(1.0 / constant);
+        }
+    }
+
+    public void normalize(PhyloTree other) {
+        double combinedVecLength = getDistanceFromOrigin() + other.getDistanceFromOrigin();
+        normalize(combinedVecLength);
+        other.normalize(combinedVecLength);
+    }
+
+    public int numLeaves() {
+        return leaf2NumMap.size();
+    }
+
+    /**
+     * Returns the distance from this tree to the origin of tree space (i.e. includes leaf edges).
+     *
+     * @return
+     */
+    public double getDistanceFromOrigin() {
+        double dist = 0;
+        for (int i = 0; i < edges.size(); i++) {
+            dist = dist + Math.pow(edges.get(i).getLength(), 2);
+        }
+
+        for (int i = 0; i < leafEdgeAttribs.length; i++) {
+            dist = dist + Math.pow(leafEdgeAttribs[i].norm(), 2);
+        }
+
+        return Math.sqrt(dist);
+    }
+
+    /**
+     * Returns the distance from this tree to the origin of tree space \ leaf space.  (i.e. doesn't include leaves)
+     *
+     * @return
+     */
+    public double getDistanceFromOriginNoLeaves() {
+        double dist = 0;
+        for (int i = 0; i < edges.size(); i++) {
+            dist = dist + Math.pow(edges.get(i).getLength(), 2);
+        }
+
+        return Math.sqrt(dist);
+    }
+
+    /**
+     * Returns the sum of the tree's edge lengths
+     */
+    public double getBranchLengthSum() {
+        double sum = 0;
+        for (int i = 0; i < edges.size(); i++) {
+            sum += edges.get(i).getLength();
+        }
+
+        for (int i = 0; i < leafEdgeAttribs.length; i++) {
+            sum += leafEdgeAttribs[i].norm();
+        }
+
+        return sum;
+    }
+
+    /**
      * Returns the edges that are not in common with edges in t, excluding edges of length 0.
      *
      * @param t
@@ -440,7 +487,6 @@ public class PhyloTree {
 
         return notCommonEdges;
     }
-
 
     public void permuteLeaves() {
         Vector<PhyloTreeEdge> v = this.edges;
@@ -480,6 +526,20 @@ public class PhyloTree {
 //		System.out.println("permutedV is " + permutedV);
         edges = TreeDistance.myVectorClonePhyloTreeEdge(permutedV);
     }
+
+
+    /** Assigns each interior split a random length between min and max.
+     *
+     * @param min
+     * @param max
+     */
+//	public void randomIntEdgeLengths(double min, double max) {
+//
+//
+//		for (int i = 0; i < edges.size();i++) {
+//			edges.get(i).setLength(Math.random()*(max - min) + min);
+//		}
+//	}
 
     public void permuteLeaves(int[] permutation) {
         Vector<PhyloTreeEdge> v = this.edges;
@@ -529,21 +589,6 @@ public class PhyloTree {
             }
         }
     }
-
-
-    /** Assigns each interior split a random length between min and max.
-     *
-     * @param min
-     * @param max
-     */
-//	public void randomIntEdgeLengths(double min, double max) {
-//
-//
-//		for (int i = 0; i < edges.size();i++) {
-//			edges.get(i).setLength(Math.random()*(max - min) + min);
-//		}
-//	}
-
 
     /**
      * Deletes the split corresponding to bipartition e from the tree.
@@ -595,27 +640,6 @@ public class PhyloTree {
     public void addEdge(PhyloTreeEdge e) {
         edges.add(e);
     }
-
-    /**
-     * Returns the smallest index in a string t after position i, at which one of the characters in s is located.
-     *
-     * @param i
-     * @param s
-     * @return t.length() if no character in s is located after position i in t; otherwise return the min index
-     */
-    public static int nextIndex(String t, int i, String s) {
-        int minIndex = t.length();
-        int tempIndex = -1;
-
-        for (int j = 0; j < s.length(); j++) {
-            tempIndex = t.substring(i + 1).indexOf(s.charAt(j));
-            if ((tempIndex != -1) && (tempIndex + i + 1 < minIndex)) {
-                minIndex = tempIndex + i + 1;
-            }
-        }
-        return minIndex;
-    }
-
 
     /**
      * Returns a vector containing representations of 0-1 vectors which
@@ -683,7 +707,6 @@ public class PhyloTree {
         return "Leaves: " + leaf2NumMap + "; edges: " + edges + "; leaf edges: " + Arrays.toString(leafEdgeAttribs);
     }
 
-
     // TODO:  not actually overriding the object clone method.  Also, clone should not call constructors.
     public PhyloTree clone() {
         return new PhyloTree(TreeDistance.myVectorClonePhyloTreeEdge(edges), TreeDistance.myVectorCloneString(leaf2NumMap), leafEdgeAttribs.clone());
@@ -726,42 +749,12 @@ public class PhyloTree {
         return (PolyMain.getGeodesic(this, t, null).getDist() < epsilon);
     }
 
-
-    // XXX for now this is the testing procedure
-    public static void main(String args[]) {
-        PhyloTree t1 = new PhyloTree("((A:0.1,B:0.2):1,(C:0.3,D:0.4):2)", true);
-        // should produce:  [1.0 11, 2.0 1100]
-        System.out.println("Edges of tree 1 (length, followed by leaves as 1's): " + t1.getEdges().toString());
-
-        PhyloTree t2 = new PhyloTree("(((B:0.1,A:0.2):1,C:0.3):2,(D:0.4,E:0.5):3)", true);
-        // should produce: [1.0 11, 2.0 111, 3.0 11000]
-        System.out.println("Edges of tree 2: " + t2.getEdges().toString());
-
-        // has the same leaf2NumMap as t2 and a common split
-        PhyloTree t3 = new PhyloTree("((A:0.1,B:0.2):1,(C:0.3,(D:0.4,E:0.5):2):3)", true);
-        // should produce [1.0 11, 2.0 11100, 3.0 11000]
-        System.out.println("Edges of tree 3: " + t3.getEdges().toString());
-
-        System.out.println("common edges of t2 and t3: " + getCommonEdges(t2, t3));
-
-        // should have no common edges with t2
-        PhyloTree t4 = new PhyloTree("((A:0,C:0):1,(D:0,(B:0,E:0):2):3)", true);
-        System.out.println("Edges of tree 4:" + t4.getEdges().toString());
-        System.out.println("1s indicate edges in tree 4 crossed by that split in tree2: " + t2.getCrossingsWith(t4));
-        System.out.println("1s indicate edges in tree 1 crossed by that split in tree 4: " + t1.getCrossingsWith(t4));
-
-        PhyloTree triTop = new PhyloTree("(((A:0,B:0):1,(C:0,D:0):2):3,E:0)", true);
-        System.out.println("Edges of tree TriTop: " + triTop.getEdges());
-        PhyloTree triBot = new PhyloTree("(((D:0,E:0):1,(C:0,B:0):2):3,A:0)", true);
-        System.out.println("1s indicate edgdes in tree triBot crossed by that split in tree triTop:" + triBot.getCrossingsWith(triTop));
-        PhyloTree noCommonSortingWithTriTop = new PhyloTree("(((A:0,C:0):1,E:0):2,(B:0,D:0):3)", true);
-        System.out.println("Edges of tree noCommonSortingWithTriTop: " + noCommonSortingWithTriTop.getEdges());
-        System.out.println("1s indicate edges in tree triTop crossed by that split in tree noCommonSortingWithTriTop: " +
-                noCommonSortingWithTriTop.getCrossingsWith(triTop));
-    }
-
     public EdgeAttribute[] getLeafEdgeAttribs() {
         return leafEdgeAttribs;
+    }
+
+    public void setLeafEdgeAttribs(EdgeAttribute[] leafEdgeAttribs) {
+        this.leafEdgeAttribs = leafEdgeAttribs;
     }
 
     public EdgeAttribute[] getCopyLeafEdgeAttribs() {
@@ -790,10 +783,6 @@ public class PhyloTree {
             norms[i] = edges.get(i).getAttribute().norm();
         }
         return norms;
-    }
-
-    public void setLeafEdgeAttribs(EdgeAttribute[] leafEdgeAttribs) {
-        this.leafEdgeAttribs = leafEdgeAttribs;
     }
 
     public String getNewick(boolean branchLengths) {

@@ -17,8 +17,8 @@
 
 package distanceAlg1;
 
-import java.util.*;
 import java.io.*;
+import java.util.*;
 
 
 /**
@@ -37,35 +37,26 @@ public class TreeDistance {
     public static long numNodes = 0;
 
     public static int pathToSearch = 0;
-
-    private static long numBaseCase = 0;
-
     // stores pairs of trees with no common edges.  Should be reset at each new distance calculation
     public static Vector<PhyloTree> aTreesNoCommonEdges = new Vector<PhyloTree>();
     public static Vector<PhyloTree> bTreesNoCommonEdges = new Vector<PhyloTree>();
-
     public static double firstTreeDist = -1;
-
     public static boolean rooted = true;  //holds if the trees are rooted or not.
     public static boolean normalize = false;  // holds if we should normalize the tree split lengths
-
     public static int verbose = 0;
-
     public static Hashtable<String, Double> nodeHashtable = new Hashtable<String, Double>(5000);  // creates a new hash table with 5000 buckets
+    public static Hashtable<String, Geodesic> subTreeHashtable = new Hashtable<String, Geodesic>(5000);  // creates a new hash table with 5000 buckets
     // key is the node, as represented by the Vector<Bipartition> m, and value is the shortest distance so far
     // to this node
-
-    public static Hashtable<String, Geodesic> subTreeHashtable = new Hashtable<String, Geodesic>(5000);  // creates a new hash table with 5000 buckets
-    // key is the subtree this problem represents, as represented by the string of leaf2NumMap, and value is the shortest distance between
-    // the two subtrees
-
     public static Hashtable<String, RatioSequence> subTreeRSHashtable = new Hashtable<String, RatioSequence>(5000);  // creates a new hash table with 5000 buckets
     // key is the subtree this problem represents, as represented by the string of leaf2NumMap, and value is the shortest distance between
     // the two subtrees
-
     public static String LEAF_CONTRIBUTION_SQUARED_DESCRIPTION = "(Leaf contribution squared = square of the length of the vector" +
             " whose i-th element is the absolute value of the difference between the length of the split ending in leaf i in the first tree" +
             " and the length of the split ending in leaf i in the second tree.)";
+    // key is the subtree this problem represents, as represented by the string of leaf2NumMap, and value is the shortest distance between
+    // the two subtrees
+    private static long numBaseCase = 0;
 
     /**
      * To be called in between calculating min distances
@@ -430,7 +421,7 @@ public class TreeDistance {
         int numEdges2 = t2.getEdges().size(); /// number of edges in tree 2
 
 /*		if (numBaseCase%10000 == 0) {
-			System.out.println("Called getGeodesic for trees " + t1 + " and " + t2);
+            System.out.println("Called getGeodesic for trees " + t1 + " and " + t2);
 		}*/
         if (numEdges1 == 0 && numEdges2 == 0) {
             return new Geodesic(new RatioSequence());

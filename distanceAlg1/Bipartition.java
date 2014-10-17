@@ -19,7 +19,8 @@ package distanceAlg1;
 
 // TODO:  create sameAs method and fix getCommonEdges
 
-import java.util.*;
+import java.util.BitSet;
+import java.util.Vector;
 
 public class Bipartition implements Cloneable {
 
@@ -44,8 +45,35 @@ public class Bipartition implements Cloneable {
             }
     }
 
+    public static String toStringVerbose(BitSet edge, Vector<String> leaf2NumMap) {
+/*		String toDisplay = "";
+
+		String s = Long.toBinaryString(split);
+		// we now have a 0-1 string, but it is reversed.  ie. 100 should become {2} and 1100 should become {3,2}
+		for (int i = s.length()-1; i >=0; i--) {
+			if (s.charAt(i) == '1') {
+				toDisplay = toDisplay + leaf2NumMap.get(s.length() -1 - i) + "*";
+			}
+		}
+		// remove the last *
+		return toDisplay.substring(0, toDisplay.length() - 1); */
+        String toDisplay = "";
+        for (int i = 0; i < edge.length(); i++) {
+            if (edge.get(i)) {
+                toDisplay = toDisplay + leaf2NumMap.get(i) + ",";
+            }
+        }
+        // remove the last ,
+        return toDisplay.substring(0, toDisplay.length() - 1);
+//		return toDisplay;
+    }
+
     public BitSet getPartition() {
         return partition;
+    }
+
+    public void setPartition(BitSet edge) {
+        this.partition = edge;
     }
 
     public boolean isEmpty() {
@@ -53,10 +81,6 @@ public class Bipartition implements Cloneable {
             System.out.println("in isZero, split is " + this.edge + " and will return " + split.isEmpty());
 		}*/
         return partition.isEmpty();
-    }
-
-    public void setPartition(BitSet edge) {
-        this.partition = edge;
     }
 
     /**
@@ -140,16 +164,6 @@ public class Bipartition implements Cloneable {
         return this.contains(e) && !e.contains(this);
     }
 
-    /**
-     * = this split crosses e
-     *
-     * @param e
-     * @return
-     */
-    public boolean crosses(Bipartition e) {
-        return !(disjointFrom(e) || this.contains(e) || e.contains(this));
-    }
-
     /** Returns true if e contains ones exactly where this edges doesn't.
      * numLeaves gives the total number of ones each should contain.
      * @param e
@@ -165,6 +179,16 @@ public class Bipartition implements Cloneable {
 			return false;
 		}
 	}*/
+
+    /**
+     * = this split crosses e
+     *
+     * @param e
+     * @return
+     */
+    public boolean crosses(Bipartition e) {
+        return !(disjointFrom(e) || this.contains(e) || e.contains(this));
+    }
 
     /**
      * Changes e to be its complement.
@@ -189,29 +213,6 @@ public class Bipartition implements Cloneable {
 //		return Long.toBinaryString(split);
 //		return "" + this.edge.toByteArray();
         return this.partition.toString();
-    }
-
-    public static String toStringVerbose(BitSet edge, Vector<String> leaf2NumMap) {
-/*		String toDisplay = "";
-
-		String s = Long.toBinaryString(split);
-		// we now have a 0-1 string, but it is reversed.  ie. 100 should become {2} and 1100 should become {3,2}
-		for (int i = s.length()-1; i >=0; i--) {
-			if (s.charAt(i) == '1') {
-				toDisplay = toDisplay + leaf2NumMap.get(s.length() -1 - i) + "*";
-			}
-		}
-		// remove the last *
-		return toDisplay.substring(0, toDisplay.length() - 1); */
-        String toDisplay = "";
-        for (int i = 0; i < edge.length(); i++) {
-            if (edge.get(i)) {
-                toDisplay = toDisplay + leaf2NumMap.get(i) + ",";
-            }
-        }
-        // remove the last ,
-        return toDisplay.substring(0, toDisplay.length() - 1);
-//		return toDisplay;
     }
 
     /**

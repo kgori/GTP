@@ -17,7 +17,8 @@
 
 package distanceAlg1;
 
-import java.util.*;
+import java.util.BitSet;
+import java.util.Vector;
 
 public class PhyloTreeEdge extends Bipartition {
     private EdgeAttribute attribute;
@@ -88,40 +89,6 @@ public class PhyloTreeEdge extends Bipartition {
         this.originalID = originalID;
     }
 
-    // Getters and Setters
-    // Return
-    public double getLength() {
-        return attribute.norm();
-    }
-
-    /**
-     * Returns true if the length of the edge is 0.
-     */
-    public boolean isZero() {
-        return (this.getLength() == 0);        //XXX: Change to make dependent on tolerance.
-    }
-
-    /** String representation of an split.
-     * Returns the length followed by a 0-1 vector, representing the children.
-     */
-/*	public String toString() {
-        return "" + TreeDistance.truncate(length,6) + " " + super.toString();
-	}
-*/
-
-    /**
-     * String representation of an split.
-     */
-    public String toString() {
-        return "" + attribute + " " + partition;
-    }
-
-    public String toStringVerbose(Vector<String> leaf2NumMap) {
-
-        return "" + originalID + "\t\t" + attribute + "\t\t" + Bipartition.toStringVerbose(this.partition, leaf2NumMap);
-    }
-
-
     /**
      * Returns a string of what it printed out.
      *
@@ -146,6 +113,39 @@ public class PhyloTreeEdge extends Bipartition {
             }
         }
         return output;
+    }
+
+    // Getters and Setters
+    // Return
+    public double getLength() {
+        return attribute.norm();
+    }
+
+    /** String representation of an split.
+     * Returns the length followed by a 0-1 vector, representing the children.
+     */
+/*	public String toString() {
+        return "" + TreeDistance.truncate(length,6) + " " + super.toString();
+	}
+*/
+
+    /**
+     * Returns true if the length of the edge is 0.
+     */
+    public boolean isZero() {
+        return (this.getLength() == 0);        //XXX: Change to make dependent on tolerance.
+    }
+
+    /**
+     * String representation of an split.
+     */
+    public String toString() {
+        return "" + attribute + " " + partition;
+    }
+
+    public String toStringVerbose(Vector<String> leaf2NumMap) {
+
+        return "" + originalID + "\t\t" + attribute + "\t\t" + Bipartition.toStringVerbose(this.partition, leaf2NumMap);
     }
 
     // TODO:  currently not overriding the object clone because doesn't return type Object.
@@ -204,11 +204,11 @@ public class PhyloTreeEdge extends Bipartition {
         this.originalID = originalID;
     }
 
-    public void setAttribute(EdgeAttribute attrib) {
-        this.attribute = attrib;
-    }
-
     public EdgeAttribute getAttribute() {
         return attribute;
+    }
+
+    public void setAttribute(EdgeAttribute attrib) {
+        this.attribute = attrib;
     }
 }

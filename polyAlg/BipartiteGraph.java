@@ -16,10 +16,10 @@
 
 package polyAlg;
 
-import java.lang.reflect.*;
+import java.lang.reflect.Array;
 
-import static java.lang.System.*;
-import static java.lang.Math.*;
+import static java.lang.Math.max;
+import static java.lang.System.out;
 
 
 /**
@@ -176,7 +176,7 @@ public class BipartiteGraph {
             // scan for an augmenting path
             scanning:
             while (AScanListSize != 0) {
-				/* Scan the A side nodes*/
+                /* Scan the A side nodes*/
                 BScanListSize = 0;
                 for (i = 0; i <= AScanListSize - 1; i++)
                     for (j = 0; j <= nBVC - 1; j++)
@@ -186,12 +186,10 @@ public class BipartiteGraph {
                             BScanList[BScanListSize] = Bindex[j];
                             BScanListSize++;
                         }
-//out.format("BScanList =");
-//for (j=0;j<=BScanListSize-1;j++) out.format(" %d",BScanList[j]);
-//out.format("\n\n");
+
 				/* Scan the B side nodes*/
                 AScanListSize = 0;
-                for (j = 0; j <= BScanListSize - 1; j++)
+                for (j = 0; j <= BScanListSize - 1; j++) {
                     if (Bvertex[BScanList[j]].residual > 0) {
                         total = min(Bvertex[BScanList[j]].residual, Bvertex[BScanList[j]].label);
                         augmentingPathEnd = BScanList[j];
@@ -203,9 +201,8 @@ public class BipartiteGraph {
                             AScanList[AScanListSize] = Aindex[i];
                             AScanListSize++;
                         }
-//out.format("AScanList =");
-//for (i=0;i<=AScanListSize-1;i++) out.format(" %d",AScanList[i]);
-//out.format("\n\n");
+                }
+
             }//scanning procedure
 
             if (total > 0) { // flow augmentation

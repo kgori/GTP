@@ -17,10 +17,10 @@
 
 package distanceAlg1;
 
-import java.io.IOException;
-import java.util.*;
-
 import polyAlg.PolyMain;
+
+import java.io.IOException;
+import java.util.Vector;
 
 public class Geodesic {
     private RatioSequence rs;
@@ -45,126 +45,6 @@ public class Geodesic {
         this.rs = rs;
         //		this.rs = rs.getAscRSWithMinDist();
         commonEdges = cEdges;
-        this.leafContributionSquared = leafContributionSquared;
-    }
-
-    public RatioSequence getRS() {
-        return rs;
-    }
-
-    public void setRS(RatioSequence rs) {
-        this.rs = rs;
-    }
-
-    public double getDist() {
-        double commonEdgeDistSquared = 0;
-        for (int i = 0; i < commonEdges.size(); i++) {
-            commonEdgeDistSquared = commonEdgeDistSquared + Math.pow(commonEdges.get(i).getLength(), 2);
-        }
-/*		if (TreeDistance.verbose > 0) {
-            System.out.println("rs.getAscRSWithMinDist().getDistance() is " + rs.getAscRSWithMinDist().getDistance() + "; commonEdgeDistSquared is " +commonEdgeDistSquared + "; and leafContributionSquared is " + leafContributionSquared);
-		} */
-        return Math.sqrt(Math.pow(rs.getNonDesRSWithMinDist().getDistance(), 2) + commonEdgeDistSquared + leafContributionSquared);
-    }
-
-
-    /**
-     * Adds split to list of common edges.  Assumes the length is the change in this common split
-     * between the two trees.
-     */
-    public void addCommonEdge(PhyloTreeEdge e) {
-        commonEdges.add(e);
-    }
-
-    /**
-     * Displays the geodesic in user-friendly form.
-     *
-     * @return
-     */
-    public String toStringVerboseOld(PhyloTree t1, PhyloTree t2) {
-        Vector<PhyloTreeEdge> commonEdges = this.getCommonEdges();
-        Boolean cEdge = false;
-
-        // display T1 only splits
-        String toDisplay = "\nSplits only in T1:\n";
-        for (int i = 0; i < t1.getEdges().size(); i++) {
-            cEdge = false;
-            for (int j = 0; j < commonEdges.size(); j++) {
-                if (commonEdges.get(j).sameBipartition(t1.getEdge(i))) {
-                    cEdge = true;
-                    break;
-                }
-            }
-            if (!cEdge) {
-                toDisplay = toDisplay + t1.getEdge(i).toStringVerbose(t1.getLeaf2NumMap()) + "\n" + t1.getEdge(i) + "\n";
-            }
-        }
-
-        //display T2 only splits
-        toDisplay = toDisplay + "\n\nSplits only in T2:\n";
-        for (int i = 0; i < t2.getEdges().size(); i++) {
-            if (!commonEdges.contains(t2.getEdge(i))) {
-                // if this is not a common split, display
-//				toDisplay = toDisplay + t2.getEdge(i).toStringVerbose(t2.getLeaf2NumMap()) + "\n";
-                toDisplay = toDisplay + t2.getEdge(i).toStringVerbose(t2.getLeaf2NumMap()) + "\n" + t2.getEdge(i) + "\n";
-            }
-        }
-
-        // display common splits
-        toDisplay = toDisplay + "\n\nCommon splits:\n";
-        for (int i = 0; i < commonEdges.size(); i++) {
-//			toDisplay = toDisplay + commonEdges.get(i).toStringVerbose(t1.getLeaf2NumMap()) + "\n";
-            toDisplay = toDisplay + commonEdges.get(i).toStringVerbose(t1.getLeaf2NumMap()) + "\n" + commonEdges.get(i) + "\n";
-        }
-
-        return toDisplay;
-    }
-
-    public Geodesic clone() {
-        return new Geodesic(rs.clone(), TreeDistance.myVectorClonePhyloTreeEdge(commonEdges));
-    }
-
-    public String toString() {
-        return "" + getDist() + "; " + rs.getNonDesRSWithMinDist();
-//		return "" + getDist() + "; " + rs;
-    }
-
-    public Vector<PhyloTreeEdge> getCommonEdges() {
-        return commonEdges;
-    }
-
-    public void setCommonEdges(Vector<PhyloTreeEdge> commonEdges) {
-        this.commonEdges = commonEdges;
-    }
-
-    public int numCommonEdges() {
-        return commonEdges.size();
-    }
-
-    /**
-     * Returns the number of orthants/topologies that the geodesic passes through (not including boundaries between orthants).
-     * = # ratios in the strictly ascending ratio sequences + 1
-     *
-     * @return
-     */
-    public int numTopologies() {
-        return rs.getAscRSWithMinDist().size() + 1;
-    }
-
-    /**
-     * Returns the geodesic with the ratio sequence (and ratios) reversed.
-     *
-     * @return
-     */
-    public Geodesic reverse() {
-        return new Geodesic(rs.reverse(), commonEdges, leafContributionSquared);
-    }
-
-    public double getLeafContributionSquared() {
-        return leafContributionSquared;
-    }
-
-    public void setLeafContributionSquared(double leafContributionSquared) {
         this.leafContributionSquared = leafContributionSquared;
     }
 
@@ -349,5 +229,124 @@ public class Geodesic {
         }
 
         return commonEdges;
+    }
+
+    public RatioSequence getRS() {
+        return rs;
+    }
+
+    public void setRS(RatioSequence rs) {
+        this.rs = rs;
+    }
+
+    public double getDist() {
+        double commonEdgeDistSquared = 0;
+        for (int i = 0; i < commonEdges.size(); i++) {
+            commonEdgeDistSquared = commonEdgeDistSquared + Math.pow(commonEdges.get(i).getLength(), 2);
+        }
+/*		if (TreeDistance.verbose > 0) {
+            System.out.println("rs.getAscRSWithMinDist().getDistance() is " + rs.getAscRSWithMinDist().getDistance() + "; commonEdgeDistSquared is " +commonEdgeDistSquared + "; and leafContributionSquared is " + leafContributionSquared);
+		} */
+        return Math.sqrt(Math.pow(rs.getNonDesRSWithMinDist().getDistance(), 2) + commonEdgeDistSquared + leafContributionSquared);
+    }
+
+    /**
+     * Adds split to list of common edges.  Assumes the length is the change in this common split
+     * between the two trees.
+     */
+    public void addCommonEdge(PhyloTreeEdge e) {
+        commonEdges.add(e);
+    }
+
+    /**
+     * Displays the geodesic in user-friendly form.
+     *
+     * @return
+     */
+    public String toStringVerboseOld(PhyloTree t1, PhyloTree t2) {
+        Vector<PhyloTreeEdge> commonEdges = this.getCommonEdges();
+        Boolean cEdge = false;
+
+        // display T1 only splits
+        String toDisplay = "\nSplits only in T1:\n";
+        for (int i = 0; i < t1.getEdges().size(); i++) {
+            cEdge = false;
+            for (int j = 0; j < commonEdges.size(); j++) {
+                if (commonEdges.get(j).sameBipartition(t1.getEdge(i))) {
+                    cEdge = true;
+                    break;
+                }
+            }
+            if (!cEdge) {
+                toDisplay = toDisplay + t1.getEdge(i).toStringVerbose(t1.getLeaf2NumMap()) + "\n" + t1.getEdge(i) + "\n";
+            }
+        }
+
+        //display T2 only splits
+        toDisplay = toDisplay + "\n\nSplits only in T2:\n";
+        for (int i = 0; i < t2.getEdges().size(); i++) {
+            if (!commonEdges.contains(t2.getEdge(i))) {
+                // if this is not a common split, display
+//				toDisplay = toDisplay + t2.getEdge(i).toStringVerbose(t2.getLeaf2NumMap()) + "\n";
+                toDisplay = toDisplay + t2.getEdge(i).toStringVerbose(t2.getLeaf2NumMap()) + "\n" + t2.getEdge(i) + "\n";
+            }
+        }
+
+        // display common splits
+        toDisplay = toDisplay + "\n\nCommon splits:\n";
+        for (int i = 0; i < commonEdges.size(); i++) {
+//			toDisplay = toDisplay + commonEdges.get(i).toStringVerbose(t1.getLeaf2NumMap()) + "\n";
+            toDisplay = toDisplay + commonEdges.get(i).toStringVerbose(t1.getLeaf2NumMap()) + "\n" + commonEdges.get(i) + "\n";
+        }
+
+        return toDisplay;
+    }
+
+    public Geodesic clone() {
+        return new Geodesic(rs.clone(), TreeDistance.myVectorClonePhyloTreeEdge(commonEdges));
+    }
+
+    public String toString() {
+        return "" + getDist() + "; " + rs.getNonDesRSWithMinDist();
+//		return "" + getDist() + "; " + rs;
+    }
+
+    public Vector<PhyloTreeEdge> getCommonEdges() {
+        return commonEdges;
+    }
+
+    public void setCommonEdges(Vector<PhyloTreeEdge> commonEdges) {
+        this.commonEdges = commonEdges;
+    }
+
+    public int numCommonEdges() {
+        return commonEdges.size();
+    }
+
+    /**
+     * Returns the number of orthants/topologies that the geodesic passes through (not including boundaries between orthants).
+     * = # ratios in the strictly ascending ratio sequences + 1
+     *
+     * @return
+     */
+    public int numTopologies() {
+        return rs.getAscRSWithMinDist().size() + 1;
+    }
+
+    /**
+     * Returns the geodesic with the ratio sequence (and ratios) reversed.
+     *
+     * @return
+     */
+    public Geodesic reverse() {
+        return new Geodesic(rs.reverse(), commonEdges, leafContributionSquared);
+    }
+
+    public double getLeafContributionSquared() {
+        return leafContributionSquared;
+    }
+
+    public void setLeafContributionSquared(double leafContributionSquared) {
+        this.leafContributionSquared = leafContributionSquared;
     }
 }

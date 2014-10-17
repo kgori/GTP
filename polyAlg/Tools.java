@@ -17,10 +17,10 @@
 
 package polyAlg;
 
-import java.util.Vector;
-
 import distanceAlg1.PhyloTreeEdge;
 import distanceAlg1.RatioSequence;
+
+import java.util.Vector;
 
 public class Tools {
 

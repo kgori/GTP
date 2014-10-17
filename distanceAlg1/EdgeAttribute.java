@@ -4,9 +4,8 @@ import java.text.DecimalFormat;
 import java.util.Arrays;
 
 public class EdgeAttribute {
-    double[] vect;
-
     public static final double TOLERANCE = 0.000000000000001;  // compares double values up to TOLERANCE (currently 15 decimal places)
+    double[] vect;
 
     public EdgeAttribute() {
         this.vect = null;
@@ -40,84 +39,6 @@ public class EdgeAttribute {
             System.err.println("Error creating new edge attribute: input string does not have double where expected or bracket problem: " + e.getMessage());
             throw e;
         }
-    }
-
-
-    public double getAttribute() {
-        if (vect == null) {
-            return 0;
-        }
-        return vect[0];
-    }
-
-    public void setEdgeAttribute(EdgeAttribute attrib) {
-        this.vect = attrib.vect;
-    }
-
-    public EdgeAttribute clone() {
-        return new EdgeAttribute(Arrays.copyOf(vect, vect.length));
-    }
-
-    public String toString() {
-        if (vect == null) {
-            return "";
-        }
-
-        // 10 decimals
-        DecimalFormat df = new DecimalFormat("#0.##########");
-        if (vect.length == 1) {
-            return df.format(vect[0]);
-        }
-
-        String str = "[" + df.format(vect[0]);
-        for (int i = 1; i < vect.length; i++) {
-            str = str + " " + df.format(vect[i]);
-        }
-        return str + "]";
-    }
-
-    // TODO:  only set up to handle the attribute being a vector
-    @Override
-    public boolean equals(Object e) {
-        if (e == null) {
-            return false;
-        }
-        if (this == e) {
-            return true;
-        }
-
-        if (!(e instanceof EdgeAttribute)) {
-            return false;
-        }
-
-        // we cannot just use Arrays.equal, since we need to compare the double values with a tolerance.
-        for (int i = 0; i < vect.length; i++) {
-            if (Math.abs(vect[i] - ((EdgeAttribute) e).vect[i]) > TOLERANCE) {
-                return false;
-            }
-        }
-
-        return true;
-    }
-
-    /**
-     * Compute the L2 norm or equivalent for this kind of attribute.
-     *
-     * @param attrib
-     * @return
-     */
-    public double norm() {
-        if (vect == null) {
-            return 0.0;
-        }
-
-        double norm = 0;
-
-        for (int i = 0; i < vect.length; i++) {
-            norm = norm + Math.pow(vect[i], 2);
-        }
-
-        return Math.sqrt(norm);
     }
 
     /**
@@ -245,6 +166,100 @@ public class EdgeAttribute {
         return point;
     }
 
+    /**
+     * Returns the EdgeAttribute with vector length length,
+     * with all entries 0.
+     *
+     * @param length
+     * @return
+     */
+    public static EdgeAttribute zeroAttribute(int size) {
+        if (size < 1) {
+            System.err.println("Error creating zero edge attribute of size " + size + "; invalid size");
+            throw new RuntimeException();
+        }
+
+        EdgeAttribute zero = new EdgeAttribute(new double[size]);
+        Arrays.fill(zero.vect, 0.0);
+        return zero;
+    }
+
+    public double getAttribute() {
+        if (vect == null) {
+            return 0;
+        }
+        return vect[0];
+    }
+
+    public void setEdgeAttribute(EdgeAttribute attrib) {
+        this.vect = attrib.vect;
+    }
+
+    public EdgeAttribute clone() {
+        return new EdgeAttribute(Arrays.copyOf(vect, vect.length));
+    }
+
+    public String toString() {
+        if (vect == null) {
+            return "";
+        }
+
+        // 10 decimals
+        DecimalFormat df = new DecimalFormat("#0.##########");
+        if (vect.length == 1) {
+            return df.format(vect[0]);
+        }
+
+        String str = "[" + df.format(vect[0]);
+        for (int i = 1; i < vect.length; i++) {
+            str = str + " " + df.format(vect[i]);
+        }
+        return str + "]";
+    }
+
+    // TODO:  only set up to handle the attribute being a vector
+    @Override
+    public boolean equals(Object e) {
+        if (e == null) {
+            return false;
+        }
+        if (this == e) {
+            return true;
+        }
+
+        if (!(e instanceof EdgeAttribute)) {
+            return false;
+        }
+
+        // we cannot just use Arrays.equal, since we need to compare the double values with a tolerance.
+        for (int i = 0; i < vect.length; i++) {
+            if (Math.abs(vect[i] - ((EdgeAttribute) e).vect[i]) > TOLERANCE) {
+                return false;
+            }
+        }
+
+        return true;
+    }
+
+    /**
+     * Compute the L2 norm or equivalent for this kind of attribute.
+     *
+     * @param attrib
+     * @return
+     */
+    public double norm() {
+        if (vect == null) {
+            return 0.0;
+        }
+
+        double norm = 0;
+
+        for (int i = 0; i < vect.length; i++) {
+            norm = norm + Math.pow(vect[i], 2);
+        }
+
+        return Math.sqrt(norm);
+    }
 
     /**
      * Scales each of the elements of vect by a.
@@ -277,23 +292,5 @@ public class EdgeAttribute {
         if (vect.length == 1) {
             vect[0] = Math.abs(vect[0]);
         }
-    }
-
-    /**
-     * Returns the EdgeAttribute with vector length length,
-     * with all entries 0.
-     *
-     * @param length
-     * @return
-     */
-    public static EdgeAttribute zeroAttribute(int size) {
-        if (size < 1) {
-            System.err.println("Error creating zero edge attribute of size " + size + "; invalid size");
-            throw new RuntimeException();
-        }
-
-        EdgeAttribute zero = new EdgeAttribute(new double[size]);
-        Arrays.fill(zero.vect, 0.0);
-        return zero;
     }
 }

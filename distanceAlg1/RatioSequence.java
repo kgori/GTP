@@ -18,7 +18,8 @@
 package distanceAlg1;
 
 import java.text.DecimalFormat;
-import java.util.*;
+import java.util.Arrays;
+import java.util.Vector;
 
 /**
  * An instance of this class represents a sequence of ratios.
@@ -71,12 +72,71 @@ public class RatioSequence extends Vector<Ratio> {
 	}
 */
 
-    public void setCombineCode(int c) {
-        combineCode = c;
+    /**
+     * Interleaves the ratio sequences rs1 and rs2 after combining them to get
+     * the ascending ratio sequence with the min distance,
+     * to make a new ratio sequence.
+     *
+     * @param rs1
+     * @param rs2
+     * @return
+     */
+    public static RatioSequence interleave(RatioSequence rs1, RatioSequence rs2) {
+        RatioSequence combined1 = rs1.getNonDesRSWithMinDist();
+        RatioSequence combined2 = rs2.getNonDesRSWithMinDist();
+
+        RatioSequence interleavedRS = new RatioSequence();
+        int index1 = 0;  // index for stepping through combined1
+        int index2 = 0;  // index for stepping through combined2
+        while (index1 < combined1.size() && index2 < combined2.size()) {
+            if (combined1.get(index1).getRatio() <= combined2.get(index2).getRatio()) {
+                interleavedRS.add(combined1.get(index1));
+                index1++;
+            } else {
+                interleavedRS.add(combined2.get(index2));
+                index2++;
+            }
+        }
+        // if we have finished adding rs2 but not rs1
+        while (index1 < combined1.size()) {
+            interleavedRS.add(combined1.get(index1));
+            index1++;
+        }
+        // if we have finished adding rs1 but not rs2
+        while (index2 < combined2.size()) {
+            interleavedRS.add(combined2.get(index2));
+            index2++;
+        }
+
+        return interleavedRS;
+    }
+
+    /**
+     * Returns a randomly generated RatioSequence with d ratios,
+     * each with a numerator and denominator randomly generated between 0 and 1.
+     *
+     * @param d
+     * @return
+     */
+    public static RatioSequence getRandomRS(int dim) {
+        String ptA = "";
+        String ptB = "";
+
+        //generate points randomly.  # of coordinates = dimension
+        for (int i = 0; i < dim; i++) {
+            ptA = ptA + (Math.random() + 0.1) / 1.1 + ",";
+            ptB = ptB + (Math.random() + 0.1) / 1.1 + ",";
+        }
+
+        return new RatioSequence(ptA, ptB);
     }
 
     public int getCombineCode() {
         return combineCode;
+    }
+
+    public void setCombineCode(int c) {
+        combineCode = c;
     }
 
     /**
@@ -144,46 +204,6 @@ public class RatioSequence extends Vector<Ratio> {
         return getNonDesRSWithMinDist().getDistance();
     }
 
-
-    /**
-     * Interleaves the ratio sequences rs1 and rs2 after combining them to get
-     * the ascending ratio sequence with the min distance,
-     * to make a new ratio sequence.
-     *
-     * @param rs1
-     * @param rs2
-     * @return
-     */
-    public static RatioSequence interleave(RatioSequence rs1, RatioSequence rs2) {
-        RatioSequence combined1 = rs1.getNonDesRSWithMinDist();
-        RatioSequence combined2 = rs2.getNonDesRSWithMinDist();
-
-        RatioSequence interleavedRS = new RatioSequence();
-        int index1 = 0;  // index for stepping through combined1
-        int index2 = 0;  // index for stepping through combined2
-        while (index1 < combined1.size() && index2 < combined2.size()) {
-            if (combined1.get(index1).getRatio() <= combined2.get(index2).getRatio()) {
-                interleavedRS.add(combined1.get(index1));
-                index1++;
-            } else {
-                interleavedRS.add(combined2.get(index2));
-                index2++;
-            }
-        }
-        // if we have finished adding rs2 but not rs1
-        while (index1 < combined1.size()) {
-            interleavedRS.add(combined1.get(index1));
-            index1++;
-        }
-        // if we have finished adding rs1 but not rs2
-        while (index2 < combined2.size()) {
-            interleavedRS.add(combined2.get(index2));
-            index2++;
-        }
-
-        return interleavedRS;
-    }
-
     public RatioSequence clone() {
         if (this == null) {
             return null;
@@ -199,26 +219,6 @@ public class RatioSequence extends Vector<Ratio> {
         }
         newRS.setCombineCode(this.getCombineCode());
         return newRS;
-    }
-
-    /**
-     * Returns a randomly generated RatioSequence with d ratios,
-     * each with a numerator and denominator randomly generated between 0 and 1.
-     *
-     * @param d
-     * @return
-     */
-    public static RatioSequence getRandomRS(int dim) {
-        String ptA = "";
-        String ptB = "";
-
-        //generate points randomly.  # of coordinates = dimension
-        for (int i = 0; i < dim; i++) {
-            ptA = ptA + (Math.random() + 0.1) / 1.1 + ",";
-            ptB = ptB + (Math.random() + 0.1) / 1.1 + ",";
-        }
-
-        return new RatioSequence(ptA, ptB);
     }
 
     /**

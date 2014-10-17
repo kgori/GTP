@@ -17,10 +17,10 @@
 
 package distanceAlg1;
 
-import java.text.DecimalFormat;
-import java.util.*;
-
 import polyAlg.Tools;
+
+import java.text.DecimalFormat;
+import java.util.Vector;
 
 /**
  * A Ratio object represents some number of edges, which have been combined in the ratio sequence.
@@ -56,90 +56,6 @@ public class Ratio {
         eEdges = new Vector<PhyloTreeEdge>();
         fEdges = new Vector<PhyloTreeEdge>();
     }
-
-    public Vector<PhyloTreeEdge> getEEdges() {
-        return eEdges;
-    }
-
-
-    public void addEEdge(PhyloTreeEdge edge) {
-        eEdges.add(edge);
-        eLength = geoAvg(eLength, edge.getLength());
-    }
-
-    public void addAllEEdges(Vector<PhyloTreeEdge> edges) {
-        eEdges.addAll(edges);
-        eLength = geoAvg(eEdges);
-    }
-
-    public double getELength() {
-//		return eLength;
-        return geoAvg(eEdges);
-    }
-
-    /**
-     * Only sets e length if no e edges are stored in the ratio.
-     * Otherwise does nothing.
-     *
-     * @param eLen
-     */
-    public void setELength(double eLen) {
-        if (eEdges.size() == 0) {
-            eLength = eLen;
-        }
-    }
-
-    /**
-     * Only sets f length if no f edges are stored in the ratio.
-     * Otherwise does nothing.
-     *
-     * @param fLen
-     */
-    public void setFLength(double fLen) {
-        if (fEdges.size() == 0) {
-            fLength = fLen;
-        }
-    }
-
-
-    public Vector<PhyloTreeEdge> getFEdges() {
-        return fEdges;
-    }
-
-    public void addFEdge(PhyloTreeEdge edge) {
-        fEdges.add(edge);
-        fLength = geoAvg(fLength, edge.getLength());
-    }
-
-    public void addAllFEdges(Vector<PhyloTreeEdge> edges) {
-        fEdges.addAll(edges);
-        fLength = geoAvg(fEdges);
-    }
-
-    public double getFLength() {
-//		return fLength;
-        return geoAvg(fEdges);
-    }
-
-
-    /**
-     * Returns the actual ratio of the (combined) length of the e edges over the (combined) length of the f edges.
-     *
-     * @return
-     */
-    public double getRatio() {
-        return eLength / fLength;
-    }
-
-    /**
-     * Returns the "time" (between 0 and 1) that we cross the orthant boundary associated with this ratio.
-     *
-     * @return
-     */
-    public double getTime() {
-        return eLength / (eLength + fLength);
-    }
-
 
     /**
      * Combines the two ratios.  If neither ratio has edges associated with it, just combine the lengths.
@@ -188,6 +104,86 @@ public class Ratio {
         }
 
         return Math.sqrt(gAvg);
+    }
+
+    public Vector<PhyloTreeEdge> getEEdges() {
+        return eEdges;
+    }
+
+    public void addEEdge(PhyloTreeEdge edge) {
+        eEdges.add(edge);
+        eLength = geoAvg(eLength, edge.getLength());
+    }
+
+    public void addAllEEdges(Vector<PhyloTreeEdge> edges) {
+        eEdges.addAll(edges);
+        eLength = geoAvg(eEdges);
+    }
+
+    public double getELength() {
+//		return eLength;
+        return geoAvg(eEdges);
+    }
+
+    /**
+     * Only sets e length if no e edges are stored in the ratio.
+     * Otherwise does nothing.
+     *
+     * @param eLen
+     */
+    public void setELength(double eLen) {
+        if (eEdges.size() == 0) {
+            eLength = eLen;
+        }
+    }
+
+    public Vector<PhyloTreeEdge> getFEdges() {
+        return fEdges;
+    }
+
+    public void addFEdge(PhyloTreeEdge edge) {
+        fEdges.add(edge);
+        fLength = geoAvg(fLength, edge.getLength());
+    }
+
+    public void addAllFEdges(Vector<PhyloTreeEdge> edges) {
+        fEdges.addAll(edges);
+        fLength = geoAvg(fEdges);
+    }
+
+    public double getFLength() {
+//		return fLength;
+        return geoAvg(fEdges);
+    }
+
+    /**
+     * Only sets f length if no f edges are stored in the ratio.
+     * Otherwise does nothing.
+     *
+     * @param fLen
+     */
+    public void setFLength(double fLen) {
+        if (fEdges.size() == 0) {
+            fLength = fLen;
+        }
+    }
+
+    /**
+     * Returns the actual ratio of the (combined) length of the e edges over the (combined) length of the f edges.
+     *
+     * @return
+     */
+    public double getRatio() {
+        return eLength / fLength;
+    }
+
+    /**
+     * Returns the "time" (between 0 and 1) that we cross the orthant boundary associated with this ratio.
+     *
+     * @return
+     */
+    public double getTime() {
+        return eLength / (eLength + fLength);
     }
 
     /**
