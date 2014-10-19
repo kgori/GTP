@@ -1262,8 +1262,8 @@ public class TreeDistance {
      * @param ratioSeq
      */
     public static void getPruned2MaxPathSpacesAsRatioSeqs(Vector<Bipartition> m, RatioSequence ratioSeq, Vector<PhyloTreeEdge> eEdges, Vector<PhyloTreeEdge> fEdges) {
-		System.out.println("TreeDistance::getPruned2MaxPathSpacesAsRatioSeqs");
-        stepForDebugging++;
+        System.out.println("TreeDistance::getPruned2MaxPathSpacesAsRatioSeqs");
+        // stepForDebugging++;
 
         // returns vector containing each minimal e-set.
         Vector<Bipartition> minEls = getMinElements(m);

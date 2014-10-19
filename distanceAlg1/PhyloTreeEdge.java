@@ -33,8 +33,8 @@ public class PhyloTreeEdge extends Bipartition {
      * Constructor: creates a new split with no child leaves and leave length as null
      */
     public PhyloTreeEdge() {
-        System.out.println("PhyloTreeEdge::constructor 1");
         super();
+        System.out.println("PhyloTreeEdge::constructor 1");
         originalEdge = new Bipartition();
         originalID = -1;
     }
@@ -45,16 +45,16 @@ public class PhyloTreeEdge extends Bipartition {
      * @param partition
      */
     public PhyloTreeEdge(BitSet edge) {
-        System.out.println("PhyloTreeEdge::constructor 2");
         super(edge);
+        System.out.println("PhyloTreeEdge::constructor 2");
         originalEdge = new Bipartition();
         originalID = -1;
 //		System.out.println("split " + split);
     }
 
     public PhyloTreeEdge(EdgeAttribute attrib) {
-        System.out.println("PhyloTreeEdge::constructor 3");
         super();
+        System.out.println("PhyloTreeEdge::constructor 3");
         this.attribute = attrib;
         originalEdge = new Bipartition();
         originalID = -1;
@@ -63,16 +63,16 @@ public class PhyloTreeEdge extends Bipartition {
 
 
     public PhyloTreeEdge(EdgeAttribute attrib, int originalID) {
-        System.out.println("PhyloTreeEdge::constructor 4");
         super();
+        System.out.println("PhyloTreeEdge::constructor 4");
         this.attribute = attrib;
         originalEdge = new Bipartition();
         this.originalID = originalID;
     }
 
     public PhyloTreeEdge(EdgeAttribute attrib, Bipartition originalEdge, int originalID) {
-        System.out.println("PhyloTreeEdge::constructor 5");
         super();
+        System.out.println("PhyloTreeEdge::constructor 5");
         this.attribute = attrib;
         this.originalEdge = new Bipartition(originalEdge.partition);
         this.originalID = originalID;
@@ -80,16 +80,16 @@ public class PhyloTreeEdge extends Bipartition {
 
 
     public PhyloTreeEdge(Bipartition edge, EdgeAttribute attrib, int originalID) {
-        System.out.println("PhyloTreeEdge::constructor 6");
         super(edge.partition);
+        System.out.println("PhyloTreeEdge::constructor 6");
         this.attribute = attrib;
         originalEdge = new Bipartition(edge.partition);
         this.originalID = originalID;
     }
 
     public PhyloTreeEdge(BitSet edge, EdgeAttribute attrib, BitSet originalEdge, int originalID) {
-        System.out.println("PhyloTreeEdge::constructor 7");
         super(edge);
+        System.out.println("PhyloTreeEdge::constructor 7");
         this.attribute = attrib;
         this.originalEdge = new Bipartition(originalEdge);
         this.originalID = originalID;
