@@ -36,6 +36,7 @@ public class RatioSequence extends Vector<Ratio> {
      * Constructor
      */
     public RatioSequence() {
+        System.out.println("RatioSequence::constructor 1");
     }
 
     /**
@@ -45,6 +46,7 @@ public class RatioSequence extends Vector<Ratio> {
      * @param ptB = string representing the negation of the coordinates of the target point "1,1,1,"
      */
     public RatioSequence(String ptA, String ptB) {
+        System.out.println("RatioSequence::constructor 2");
         // convert the two points into a ratio sequence
         while (!ptA.equals("")) {
             this.add(new Ratio(Double.valueOf(ptA.substring(0, ptA.indexOf(","))), Double.valueOf(ptB.substring(0, ptB.indexOf(",")))));
@@ -72,10 +74,12 @@ public class RatioSequence extends Vector<Ratio> {
 */
 
     public void setCombineCode(int c) {
+        System.out.println("RatioSequence::setCombineCode");
         combineCode = c;
     }
 
     public int getCombineCode() {
+        System.out.println("RatioSequence::getCombineCode");
         return combineCode;
     }
 
@@ -86,6 +90,7 @@ public class RatioSequence extends Vector<Ratio> {
      * @return
      */
     public Ratio getRatio(int i) {
+        System.out.println("RatioSequence::getRatio");
         return this.get(i);
     }
 
@@ -103,6 +108,7 @@ public class RatioSequence extends Vector<Ratio> {
      * @return
      */
     public boolean isAscending() {
+        System.out.println("RatioSequence::isAscending");
         for (int i = 0; i < this.size() - 1; i++) {
             if (((Ratio) this.get(i)).getRatio() > ((Ratio) this.get(i + 1)).getRatio()) {
                 return false;
@@ -119,6 +125,7 @@ public class RatioSequence extends Vector<Ratio> {
      * @return
      */
     public double getDistance() {
+        System.out.println("RatioSequence::getDistance");
         double distSqrd = 0;
 
         for (int i = 0; i < size(); i++) {
@@ -141,6 +148,7 @@ public class RatioSequence extends Vector<Ratio> {
      * @return
      */
     public double getMinNonDesRSDistance() {
+        System.out.println("RatioSequence::getMinNonDesRSDistance");
         return getNonDesRSWithMinDist().getDistance();
     }
 
@@ -155,6 +163,7 @@ public class RatioSequence extends Vector<Ratio> {
      * @return
      */
     public static RatioSequence interleave(RatioSequence rs1, RatioSequence rs2) {
+        System.out.println("RatioSequence::interleave");
         RatioSequence combined1 = rs1.getNonDesRSWithMinDist();
         RatioSequence combined2 = rs2.getNonDesRSWithMinDist();
 
@@ -185,6 +194,7 @@ public class RatioSequence extends Vector<Ratio> {
     }
 
     public RatioSequence clone() {
+        System.out.println("RatioSequence::clone");
         if (this == null) {
             return null;
         }
@@ -209,6 +219,7 @@ public class RatioSequence extends Vector<Ratio> {
      * @return
      */
     public static RatioSequence getRandomRS(int dim) {
+        System.out.println("RatioSequence::getRandomRS");
         String ptA = "";
         String ptB = "";
 
@@ -232,6 +243,7 @@ public class RatioSequence extends Vector<Ratio> {
      * @return
      */
     public RatioSequence getCombinedRS(int combineCode) {
+        System.out.println("RatioSequence::getCombinedRS");
         RatioSequence combinedRS = new RatioSequence(); // new ratio sequence formed by combining.
         Ratio ratioToCombineWith = this.get(0); // the ratio that we will combine the next ratio with if it is indicated we should combine the ratios
 
@@ -268,6 +280,7 @@ public class RatioSequence extends Vector<Ratio> {
      * @return
      */
     public RatioSequence getNonDesRSWithMinDist() {
+        System.out.println("RatioSequence::getNonDesRSWithMinDist");
         if (this.size() < 2) {
             return this;
         }
@@ -331,6 +344,7 @@ public class RatioSequence extends Vector<Ratio> {
      * @return
      */
     public RatioSequence getAscRSWithMinDist() {
+        System.out.println("RatioSequence::getAscRSWithMinDist");
         if (this.size() < 2) {
             return this;
         }
@@ -391,6 +405,7 @@ public class RatioSequence extends Vector<Ratio> {
      * @return
      */
     public RatioSequence reverse() {
+        System.out.println("RatioSequence::reverse");
         RatioSequence revRS = new RatioSequence();
         for (int i = size() - 1; i >= 0; i--) {
             revRS.add(get(i).reverse());
@@ -404,6 +419,7 @@ public class RatioSequence extends Vector<Ratio> {
      * @return
      */
     public String toStringValueAndRatio() {
+        System.out.println("RatioSequence::toStringValueAndRatio");
         DecimalFormat d4o = new DecimalFormat("#0.####");
         String s = "[ ";
 
@@ -415,6 +431,7 @@ public class RatioSequence extends Vector<Ratio> {
     }
 
     public String toStringValue() {
+        System.out.println("RatioSequence::toStringValue");
         DecimalFormat d4o = new DecimalFormat("#0.####");
         String s = "[ ";
 
@@ -426,6 +443,7 @@ public class RatioSequence extends Vector<Ratio> {
     }
 
     public String toStringVerbose(Vector<String> leaf2NumMap) {
+        System.out.println("RatioSequence::toStringVerbose");
         String s = "";
         for (int i = 0; i < this.size(); i++) {
             s = s + "\nRatio " + i + ":  ";
@@ -439,6 +457,7 @@ public class RatioSequence extends Vector<Ratio> {
      *
      */
     public String toStringCombType() {
+        System.out.println("RatioSequence::toStringCombType");
         String s = "";
 
         for (int i = 0; i < this.size(); i++) {
@@ -448,6 +467,7 @@ public class RatioSequence extends Vector<Ratio> {
     }
 
     public String toStringCombTypeAndValue() {
+        System.out.println("RatioSequence::toStringCombTypeAndValue");
         String s = "";
 
         for (int i = 0; i < this.size(); i++) {

@@ -26,17 +26,17 @@ public class Bipartition implements Cloneable {
     protected BitSet partition;
 
     public Bipartition() {
-        System.out.println("Bipartition constructor 1");
+        System.out.println("Bipartition::constructor 1");
         partition = new BitSet();
     }
 
     public Bipartition(BitSet edge) {
-        System.out.println("Bipartition constructor 2");
+        System.out.println("Bipartition::constructor 2");
         this.partition = edge;
     }
 
     public Bipartition(String s) {
-        System.out.println("Bipartition constructor 3");
+        System.out.println("Bipartition::constructor 3");
         partition = new BitSet();
 
         for (int i = 0; i < s.length(); i++)
@@ -48,12 +48,12 @@ public class Bipartition implements Cloneable {
     }
 
     public BitSet getPartition() {
-        System.out.println("getPartition");
+        System.out.println("Bipartition::getPartition");
         return partition;
     }
 
     public boolean isEmpty() {
-        System.out.println("isEmpty");
+        System.out.println("Bipartition::isEmpty");
 /*		if (split.isEmpty()) {
             System.out.println("in isZero, split is " + this.edge + " and will return " + split.isEmpty());
 		}*/
@@ -61,7 +61,7 @@ public class Bipartition implements Cloneable {
     }
 
     public void setPartition(BitSet edge) {
-        System.out.println("setPartition");
+        System.out.println("Bipartition::setPartition");
         this.partition = edge;
     }
 
@@ -73,7 +73,7 @@ public class Bipartition implements Cloneable {
      * @param one
      */
     public void addOne(int one) {
-        System.out.println("addOne");
+        System.out.println("Bipartition::addOne");
 //		System.out.println("split is " + split);
         partition.set(one);
 //		System.out.println("split with flipped bit in " + one + " is " + split);
@@ -87,7 +87,7 @@ public class Bipartition implements Cloneable {
      * @param leafNum
      */
     public void removeOne(int one) {
-        System.out.println("removeOne");
+        System.out.println("Bipartition::removeOne");
         partition.clear(one);
     }
 
@@ -100,7 +100,7 @@ public class Bipartition implements Cloneable {
      * @return
      */
     public boolean disjointFrom(Bipartition e) {
-        System.out.println("disjointFrom");
+        System.out.println("Bipartition::disjointFrom");
 //		return (this.edge.and(e.edge).compareTo(BigInteger.ZERO) == 0 );
 //		System.out.println("" + this.edge + " and " + e.edge + " are disjoint: " + !this.edge.intersects(e.edge));
         return !this.partition.intersects(e.partition);
@@ -116,7 +116,7 @@ public class Bipartition implements Cloneable {
      * @return
      */
     public boolean contains(Bipartition e) {
-        System.out.println("contains v 1");
+        System.out.println("Bipartition::contains v 1");
         BitSet edgeClone = (BitSet) e.partition.clone();
         edgeClone.and(this.partition);
 //		System.out.println("edgeClone is " + edgeClone);
@@ -133,7 +133,7 @@ public class Bipartition implements Cloneable {
      * @return
      */
     public boolean contains(int i) {
-        System.out.println("contains v 2");
+        System.out.println("Bipartition::contains v 2");
 //		System.out.println("" + this.edge + " contains split " + i + ": " + this.edge.get(i));
         return this.partition.get(i);
         // return this.edge.testBit(i);
@@ -147,7 +147,7 @@ public class Bipartition implements Cloneable {
      * @return
      */
     public boolean properlyContains(Bipartition e) {
-        System.out.println("properlyContains");
+        System.out.println("Bipartition::properlyContains");
         return this.contains(e) && !e.contains(this);
     }
 
@@ -158,7 +158,7 @@ public class Bipartition implements Cloneable {
      * @return
      */
     public boolean crosses(Bipartition e) {
-        System.out.println("crosses");
+        System.out.println("Bipartition::crosses");
         return !(disjointFrom(e) || this.contains(e) || e.contains(this));
     }
 
@@ -187,7 +187,7 @@ public class Bipartition implements Cloneable {
      * @return
      */
     public void complement(int numLeaves) {
-        System.out.println("complement");
+        System.out.println("Bipartition::complement");
 //		this.edge = (long)Math.pow(2,numLeaves) - 1 - this.edge;
         for (int i = 0; i < numLeaves; i++) {
             this.partition.flip(i);
@@ -199,14 +199,14 @@ public class Bipartition implements Cloneable {
      * XXX:  maybe fix???
      */
     public String toString() {
-        System.out.println("toString");
+        System.out.println("Bipartition::toString");
 //		return Long.toBinaryString(split);
 //		return "" + this.edge.toByteArray();
         return this.partition.toString();
     }
 
     public static String toStringVerbose(BitSet edge, Vector<String> leaf2NumMap) {
-        System.out.println("toStringVerbose");
+        System.out.println("Bipartition::toStringVerbose");
 /*		String toDisplay = "";
 
 		String s = Long.toBinaryString(split);
@@ -239,7 +239,7 @@ public class Bipartition implements Cloneable {
 
     @Override
     public boolean equals(Object e) {
-        System.out.println("equals");
+        System.out.println("Bipartition::equals");
         if (e == null) {
             return false;
         }
@@ -257,12 +257,13 @@ public class Bipartition implements Cloneable {
     //TODO:  currently this method does NOT override the object one, which has header "public Object clone()"
     // Do we care?  It seems like there are problems with making clones, and one could just use a copy constructor.
     public Bipartition clone() {
-        System.out.println("clone");
+        System.out.println("Bipartition::clone");
         return new Bipartition((BitSet) partition.clone());
     }
 
 
     public boolean isCompatibleWith(Vector<Bipartition> splits) {
+        System.out.println("Bipartition::isCompatibleWith");
         boolean compatible = true;
         for (int i = 0; i < splits.size(); i++) {
             if (this.crosses(splits.get(i))) {

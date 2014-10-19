@@ -37,6 +37,7 @@ public class Ratio {
     private Vector<PhyloTreeEdge> fEdges;
 
     public Ratio() {
+        System.out.println("Ratio::constructor 1");
         eLength = 0;
         fLength = 0;
         eEdges = new Vector<PhyloTreeEdge>();
@@ -44,6 +45,7 @@ public class Ratio {
     }
 
     public Ratio(Vector<PhyloTreeEdge> eEdges, Vector<PhyloTreeEdge> fEdges) {
+        System.out.println("Ratio::constructor 2");
         this.eLength = geoAvg(eEdges);
         this.fLength = geoAvg(fEdges);
         this.eEdges = eEdges;
@@ -51,6 +53,7 @@ public class Ratio {
     }
 
     public Ratio(double eLength, double fLength) {
+        System.out.println("Ratio::constructor 3");
         this.eLength = eLength;
         this.fLength = fLength;
         eEdges = new Vector<PhyloTreeEdge>();
@@ -58,21 +61,25 @@ public class Ratio {
     }
 
     public Vector<PhyloTreeEdge> getEEdges() {
+        System.out.println("Ratio::getEEdges");
         return eEdges;
     }
 
 
     public void addEEdge(PhyloTreeEdge edge) {
+        System.out.println("Ratio::addEEdge");
         eEdges.add(edge);
         eLength = geoAvg(eLength, edge.getLength());
     }
 
     public void addAllEEdges(Vector<PhyloTreeEdge> edges) {
+        System.out.println("Ratio::addAllEEdges");
         eEdges.addAll(edges);
         eLength = geoAvg(eEdges);
     }
 
     public double getELength() {
+        System.out.println("Ratio::getELength");
 //		return eLength;
         return geoAvg(eEdges);
     }
@@ -84,6 +91,7 @@ public class Ratio {
      * @param eLen
      */
     public void setELength(double eLen) {
+        System.out.println("Ratio::setELength");
         if (eEdges.size() == 0) {
             eLength = eLen;
         }
@@ -96,6 +104,7 @@ public class Ratio {
      * @param fLen
      */
     public void setFLength(double fLen) {
+        System.out.println("Ratio::setFLength");
         if (fEdges.size() == 0) {
             fLength = fLen;
         }
@@ -103,20 +112,24 @@ public class Ratio {
 
 
     public Vector<PhyloTreeEdge> getFEdges() {
+        System.out.println("Ratio::getFEdges");
         return fEdges;
     }
 
     public void addFEdge(PhyloTreeEdge edge) {
+        System.out.println("Ratio::addFEdge");
         fEdges.add(edge);
         fLength = geoAvg(fLength, edge.getLength());
     }
 
     public void addAllFEdges(Vector<PhyloTreeEdge> edges) {
+        System.out.println("Ratio::addAllFEdges");
         fEdges.addAll(edges);
         fLength = geoAvg(fEdges);
     }
 
     public double getFLength() {
+        System.out.println("Ratio::getFLength");
 //		return fLength;
         return geoAvg(fEdges);
     }
@@ -128,6 +141,7 @@ public class Ratio {
      * @return
      */
     public double getRatio() {
+        System.out.println("Ratio::getRatio");
         return eLength / fLength;
     }
 
@@ -137,6 +151,7 @@ public class Ratio {
      * @return
      */
     public double getTime() {
+        System.out.println("Ratio::getTime");
         return eLength / (eLength + fLength);
     }
 
@@ -149,6 +164,7 @@ public class Ratio {
      * @return
      */
     public static Ratio combine(Ratio r1, Ratio r2) {
+        System.out.println("Ratio::combine");
         Ratio r = new Ratio();
         if ((r1.eEdges.size() == 0) && (r2.eEdges.size() == 0)) {
             r.setELength(geoAvg(r1.eLength, r2.eLength));
@@ -177,10 +193,12 @@ public class Ratio {
      * @return
      */
     public static double geoAvg(double d1, double d2) {
+        System.out.println("Ratio::geoAvg v1");
         return Math.sqrt(Math.pow(d1, 2) + Math.pow(d2, 2));
     }
 
     public static double geoAvg(Vector<PhyloTreeEdge> edges) {
+        System.out.println("Ratio::geoAvg v2");
         double gAvg = 0;
 
         for (PhyloTreeEdge e : edges) {
@@ -196,6 +214,7 @@ public class Ratio {
      * @return
      */
     public Ratio reverse() {
+        System.out.println("Ratio::reverse");
         Ratio ratio = new Ratio();
         ratio.addAllEEdges(fEdges);
         ratio.addAllFEdges(eEdges);
@@ -204,6 +223,7 @@ public class Ratio {
 
 
     public Boolean containsOriginalEEdge(Bipartition edge) {
+        System.out.println("Ratio::containsOriginalEEdge");
         PhyloTreeEdge ratioEdge;
 
         for (int i = 0; i < eEdges.size(); i++) {
@@ -244,6 +264,7 @@ public class Ratio {
      * be ordered differently in the Vector, and hence represented differently as a String.
      */
     public String toString() {
+        System.out.println("Ratio::toString");
         DecimalFormat d4o = new DecimalFormat("#0.####");
         return eEdges.toString() + " " + d4o.format(eLength) + "/" + d4o.format(fLength) + " " + fEdges.toString();
     }
@@ -255,6 +276,7 @@ public class Ratio {
      * @return
      */
     public String toStringCombTypeAndValue() {
+        System.out.println("Ratio::toStringCombTypeAndValue");
         DecimalFormat d3o = new DecimalFormat("#0.###");
         String s = "{";
 
@@ -282,6 +304,7 @@ public class Ratio {
      * @return
      */
     public String toStringCombType() {
+        System.out.println("Ratio::toStringCombType");
         String s = "{";
 
         for (int i = 0; i < eEdges.size(); i++) {
@@ -309,10 +332,12 @@ public class Ratio {
      * @return
      */
     public String toStringJustValue() {
+        System.out.println("Ratio::toStringJustValue");
         return "" + getRatio();
     }
 
     public String toStringVerbose(Vector<String> leaf2NumMap) {
+        System.out.println("Ratio::toStringVerbose");
         DecimalFormat d6o = new DecimalFormat("#0.########");
         String s = "" + d6o.format(getRatio()) + "\nTotal length and corresponding edges dropped:\n";
 
@@ -345,6 +370,7 @@ public class Ratio {
     }
 
     public Ratio clone() {
+        System.out.println("Ratio::clone");
         Ratio r = new Ratio();
 
         // need if statements, as different behaviour depending on whether ratio contains edges or not

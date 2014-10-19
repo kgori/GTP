@@ -29,6 +29,7 @@ public class Geodesic {
 
     // constructors
     public Geodesic(RatioSequence rs) {
+        System.out.println("Geodesic::constructor1");
         this.rs = rs;
         //		this.rs = rs.getAscRSWithMinDist();
         commonEdges = new Vector<PhyloTreeEdge>();
@@ -36,12 +37,14 @@ public class Geodesic {
     }
 
     public Geodesic(RatioSequence rs, Vector<PhyloTreeEdge> cEdges) {
+        System.out.println("Geodesic::constructor2");
         this.rs = rs;
         //		this.rs = rs.getAscRSWithMinDist();
         commonEdges = cEdges;
     }
 
     public Geodesic(RatioSequence rs, Vector<PhyloTreeEdge> cEdges, double leafContributionSquared) {
+        System.out.println("Geodesic::constructor3");
         this.rs = rs;
         //		this.rs = rs.getAscRSWithMinDist();
         commonEdges = cEdges;
@@ -49,14 +52,17 @@ public class Geodesic {
     }
 
     public RatioSequence getRS() {
+        System.out.println("Geodesic::getRS");
         return rs;
     }
 
     public void setRS(RatioSequence rs) {
+        System.out.println("Geodesic::setRS");
         this.rs = rs;
     }
 
     public double getDist() {
+        System.out.println("Geodesic::getDist");
         double commonEdgeDistSquared = 0;
         for (int i = 0; i < commonEdges.size(); i++) {
             commonEdgeDistSquared = commonEdgeDistSquared + Math.pow(commonEdges.get(i).getLength(), 2);
@@ -73,6 +79,7 @@ public class Geodesic {
      * between the two trees.
      */
     public void addCommonEdge(PhyloTreeEdge e) {
+        System.out.println("Geodesic::addCommonEdge");
         commonEdges.add(e);
     }
 
@@ -82,6 +89,7 @@ public class Geodesic {
      * @return
      */
     public String toStringVerboseOld(PhyloTree t1, PhyloTree t2) {
+        System.out.println("Geodesic::toStringVerboseOld");
         Vector<PhyloTreeEdge> commonEdges = this.getCommonEdges();
         Boolean cEdge = false;
 
@@ -121,23 +129,28 @@ public class Geodesic {
     }
 
     public Geodesic clone() {
+        System.out.println("Geodesic::clone");
         return new Geodesic(rs.clone(), TreeDistance.myVectorClonePhyloTreeEdge(commonEdges));
     }
 
     public String toString() {
+        System.out.println("Geodesic::toString");
         return "" + getDist() + "; " + rs.getNonDesRSWithMinDist();
 //		return "" + getDist() + "; " + rs;
     }
 
     public Vector<PhyloTreeEdge> getCommonEdges() {
+        System.out.println("Geodesic::getCommonEdges");
         return commonEdges;
     }
 
     public void setCommonEdges(Vector<PhyloTreeEdge> commonEdges) {
+        System.out.println("Geodesic::setCommonEdges");
         this.commonEdges = commonEdges;
     }
 
     public int numCommonEdges() {
+        System.out.println("Geodesic::numCommonEdges");
         return commonEdges.size();
     }
 
@@ -148,6 +161,7 @@ public class Geodesic {
      * @return
      */
     public int numTopologies() {
+        System.out.println("Geodesic::numTopologies");
         return rs.getAscRSWithMinDist().size() + 1;
     }
 
@@ -157,14 +171,17 @@ public class Geodesic {
      * @return
      */
     public Geodesic reverse() {
+        System.out.println("Geodesic::reverse");
         return new Geodesic(rs.reverse(), commonEdges, leafContributionSquared);
     }
 
     public double getLeafContributionSquared() {
+        System.out.println("Geodesic::getLeafContributionSquared");
         return leafContributionSquared;
     }
 
     public void setLeafContributionSquared(double leafContributionSquared) {
+        System.out.println("Geodesic::setLeafContributionSquared");
         this.leafContributionSquared = leafContributionSquared;
     }
 
@@ -178,6 +195,7 @@ public class Geodesic {
      * @return
      */
     public static PhyloTree getTreeAt(PhyloTree t1, PhyloTree t2, double position) throws IOException {
+        System.out.println("Geodesic::getTreeAt");
         int lowerRatioIndex = -2;    // the index of the ratio containing all f edges in the tree we want
         // i.e. the index of the ratio with time < position, but such that the next ratio has time >= position
         // if position is in the starting orthant, we don't want any f edges.
@@ -307,6 +325,7 @@ public class Geodesic {
      * @return
      */
     public static Vector<PhyloTreeEdge> getCommonEdges(PhyloTree t1, PhyloTree t2, double position) {
+        System.out.println("Geodesic::getCommonEdges");
         EdgeAttribute commonEdgeAttribute;
         Bipartition commonSplit;
 

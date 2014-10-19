@@ -33,6 +33,7 @@ public class PhyloTreeEdge extends Bipartition {
      * Constructor: creates a new split with no child leaves and leave length as null
      */
     public PhyloTreeEdge() {
+        System.out.println("PhyloTreeEdge::constructor 1");
         super();
         originalEdge = new Bipartition();
         originalID = -1;
@@ -44,6 +45,7 @@ public class PhyloTreeEdge extends Bipartition {
      * @param partition
      */
     public PhyloTreeEdge(BitSet edge) {
+        System.out.println("PhyloTreeEdge::constructor 2");
         super(edge);
         originalEdge = new Bipartition();
         originalID = -1;
@@ -51,6 +53,7 @@ public class PhyloTreeEdge extends Bipartition {
     }
 
     public PhyloTreeEdge(EdgeAttribute attrib) {
+        System.out.println("PhyloTreeEdge::constructor 3");
         super();
         this.attribute = attrib;
         originalEdge = new Bipartition();
@@ -60,6 +63,7 @@ public class PhyloTreeEdge extends Bipartition {
 
 
     public PhyloTreeEdge(EdgeAttribute attrib, int originalID) {
+        System.out.println("PhyloTreeEdge::constructor 4");
         super();
         this.attribute = attrib;
         originalEdge = new Bipartition();
@@ -67,6 +71,7 @@ public class PhyloTreeEdge extends Bipartition {
     }
 
     public PhyloTreeEdge(EdgeAttribute attrib, Bipartition originalEdge, int originalID) {
+        System.out.println("PhyloTreeEdge::constructor 5");
         super();
         this.attribute = attrib;
         this.originalEdge = new Bipartition(originalEdge.partition);
@@ -75,6 +80,7 @@ public class PhyloTreeEdge extends Bipartition {
 
 
     public PhyloTreeEdge(Bipartition edge, EdgeAttribute attrib, int originalID) {
+        System.out.println("PhyloTreeEdge::constructor 6");
         super(edge.partition);
         this.attribute = attrib;
         originalEdge = new Bipartition(edge.partition);
@@ -82,6 +88,7 @@ public class PhyloTreeEdge extends Bipartition {
     }
 
     public PhyloTreeEdge(BitSet edge, EdgeAttribute attrib, BitSet originalEdge, int originalID) {
+        System.out.println("PhyloTreeEdge::constructor 7");
         super(edge);
         this.attribute = attrib;
         this.originalEdge = new Bipartition(originalEdge);
@@ -91,6 +98,7 @@ public class PhyloTreeEdge extends Bipartition {
     // Getters and Setters
     // Return
     public double getLength() {
+        System.out.println("PhyloTreeEdge::getLength");
         return attribute.norm();
     }
 
@@ -98,6 +106,7 @@ public class PhyloTreeEdge extends Bipartition {
      * Returns true if the length of the edge is 0.
      */
     public boolean isZero() {
+        System.out.println("PhyloTreeEdge::isZero");
         return (this.getLength() == 0);        //XXX: Change to make dependent on tolerance.
     }
 
@@ -113,11 +122,12 @@ public class PhyloTreeEdge extends Bipartition {
      * String representation of an split.
      */
     public String toString() {
+        System.out.println("PhyloTreeEdge::toString");
         return "" + attribute + " " + partition;
     }
 
     public String toStringVerbose(Vector<String> leaf2NumMap) {
-
+        System.out.println("PhyloTreeEdge::toStringVerbose");
         return "" + originalID + "\t\t" + attribute + "\t\t" + Bipartition.toStringVerbose(this.partition, leaf2NumMap);
     }
 
@@ -130,6 +140,7 @@ public class PhyloTreeEdge extends Bipartition {
      * @return
      */
     public static String printEdgesVerbose(Vector<PhyloTreeEdge> edges, Vector<String> leaf2NumMap, Boolean originalEdges) {
+        System.out.println("PhyloTreeEdge::printEdgesVerbose");
         String output = "";
 
         System.out.println("Edge ID\t\tLength\t\tLeaves Below");
@@ -151,11 +162,13 @@ public class PhyloTreeEdge extends Bipartition {
     // TODO:  currently not overriding the object clone because doesn't return type Object.
     // Also, can not use constructor.
     public PhyloTreeEdge clone() {
+        System.out.println("PhyloTreeEdge::clone");
         return new PhyloTreeEdge((BitSet) this.partition.clone(), (EdgeAttribute) this.attribute.clone(), (BitSet) this.originalEdge.getPartition().clone(), this.originalID);
     }
 
     @Override
     public boolean equals(Object e) {
+        System.out.println("PhyloTreeEdge::equals");
         if (e == null) {
             return false;
         }
@@ -171,10 +184,12 @@ public class PhyloTreeEdge extends Bipartition {
     }
 
     public boolean sameBipartition(PhyloTreeEdge e) {
+        System.out.println("PhyloTreeEdge::sameBipartition v1");
         return this.partition.equals(e.partition);
     }
 
     public boolean sameBipartition(Bipartition e) {
+        System.out.println("PhyloTreeEdge::sameBipartition v2");
         return this.partition.equals(e.partition);
     }
 
@@ -184,31 +199,38 @@ public class PhyloTreeEdge extends Bipartition {
      * @return
      */
     public Bipartition asSplit() {
+        System.out.println("PhyloTreeEdge::asSplit");
         return new Bipartition((BitSet) this.partition.clone());
     }
 
 
     public Bipartition getOriginalEdge() {
+        System.out.println("PhyloTreeEdge::getOriginalEdge");
         return originalEdge;
     }
 
     public void setOriginalEdge(Bipartition originalEdge) {
+        System.out.println("PhyloTreeEdge::setOriginalEdge");
         this.originalEdge = originalEdge;
     }
 
     public int getOriginalID() {
+        System.out.println("PhyloTreeEdge::getOriginalID");
         return originalID;
     }
 
     public void setOriginalID(int originalID) {
+        System.out.println("PhyloTreeEdge::setOriginalID");
         this.originalID = originalID;
     }
 
     public void setAttribute(EdgeAttribute attrib) {
+        System.out.println("PhyloTreeEdge::setAttribute");
         this.attribute = attrib;
     }
 
     public EdgeAttribute getAttribute() {
+        System.out.println("PhyloTreeEdge::getAttribute");
         return attribute;
     }
 }

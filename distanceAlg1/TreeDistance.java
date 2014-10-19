@@ -72,6 +72,7 @@ public class TreeDistance {
      * Clears the static variables in TreeDistance
      */
     public static void resetTreeDistanceState() {
+        System.out.println("TreeDistance::resetTreeDistanceState");
         finalRatioSeqs = new Vector<RatioSequence>();
         minTreeDist = -1;
         minTreeDistRatioSeq = null;
@@ -90,6 +91,7 @@ public class TreeDistance {
      * @return
      */
     public static Vector<Bipartition> zeroCol(int col, Vector<Bipartition> m) {
+        System.out.println("TreeDistance::zeroCol");
         Iterator<Bipartition> fEdgesIter = m.iterator();
         while (fEdgesIter.hasNext()) {
             Bipartition fEdge = fEdgesIter.next();
@@ -104,6 +106,7 @@ public class TreeDistance {
      * Checks for duplicate split in a vector of edges  (doesn't worry about split lengths)
      */
     public static boolean checkForDuplicateEdges(Vector<PhyloTreeEdge> edges) {
+        System.out.println("TreeDistance::checkForDuplicateEdges");
         boolean duplicate = false;
         for (int i = 0; i < edges.size() - 1; i++) {
             for (int j = i + 1; j < edges.size(); j++) {
@@ -126,6 +129,7 @@ public class TreeDistance {
      * XXX: how to deal with multifurcating trees
      */
     public static Geodesic getGeodesic2(PhyloTree t1, PhyloTree t2, String algorithm, String geoFile) throws IOException {
+        System.out.println("TreeDistance::getGeodesic2");
         double leafContributionSquared = 0;
         EdgeAttribute[] t1LeafEdgeAttribs = t1.getLeafEdgeAttribs();
         EdgeAttribute[] t2LeafEdgeAttribs = t2.getLeafEdgeAttribs();
@@ -277,6 +281,7 @@ public class TreeDistance {
      * and in bTreesNoCommonEdges (from t2).  Also returns a vector containing pairs of tree with no common edges.
      */
     public static Vector<PhyloTree> splitOnCommonEdge(PhyloTree t1, PhyloTree t2) {
+        System.out.println("TreeDistance::splitOnCommonEdge");
         Vector<PhyloTree> disjointTreePairs = new Vector<PhyloTree>();
         int numEdges1 = t1.getEdges().size(); // number of edges in tree 1
         int numEdges2 = t2.getEdges().size(); /// number of edges in tree 2
@@ -424,6 +429,7 @@ public class TreeDistance {
      * XXX: how to deal with multifurcating trees
      */
     public static Geodesic getGeodesicRecursive(PhyloTree t1, PhyloTree t2, String algorithm) {
+        System.out.println("TreeDistance::getGeodesicRecursive");
         resetTreeDistanceState();  // reset the static variables in tree distance
 
         int numEdges1 = t1.getEdges().size(); // number of edges in tree 1
@@ -616,6 +622,7 @@ public class TreeDistance {
      * @return
      */
     public static Geodesic[][] getAllInterTreeGeodesics(PhyloTree[] trees, int numTrees, String algorithm, boolean doubleCheck) throws IOException {
+        System.out.println("TreeDistance::getAllInterTreeGeodesics");
         Date startTime;
         Date endTime;
         long[][] compTimes = new long[numTrees][numTrees];
@@ -706,6 +713,7 @@ public class TreeDistance {
      * @return
      */
     public static Geodesic getPruned1GeodesicNoCommonEdges(PhyloTree t1, PhyloTree t2) {
+        System.out.println("TreeDistance::getPruned1GeodesicNoCommonEdges");
         resetTreeDistanceState();
         numMaxPaths = 0;
 //		System.out.println("No common edges!");
@@ -756,6 +764,7 @@ public class TreeDistance {
      * @return
      */
     public static Geodesic getPruned2GeodesicNoCommonEdges(PhyloTree t1, PhyloTree t2) {
+        System.out.println("TreeDistance::getPruned2GeodesicNoCommonEdges");
         resetTreeDistanceState();
         numMaxPaths = 0;
 //		System.out.println("No common edges!");
@@ -821,6 +830,7 @@ public class TreeDistance {
      * @return
      */
     public static Geodesic getDivideAndConquerGeodesicNoCommonEdges(PhyloTree t1, PhyloTree t2) {
+        System.out.println("TreeDistance::getDivideAndConquerGeodesicNoCommonEdges");
         Bipartition minEl;
         PhyloTree newT1 = null;
         Geodesic geo = null;
@@ -918,6 +928,7 @@ public class TreeDistance {
      * @return
      */
     public static RatioSequence getDivideAndConquerRSNoCommonEdges(PhyloTree t1, PhyloTree t2) {
+        System.out.println("TreeDistance::getDivideAndConquerRSNoCommonEdges");
         Bipartition minEl;
         PhyloTree newT1 = null;
         RatioSequence rs = null;
@@ -1040,6 +1051,7 @@ public class TreeDistance {
      * @return
      */
     public static Ratio calculateRatio(Bipartition minEl, Vector<Bipartition> m, Vector<PhyloTreeEdge> eEdges, Vector<PhyloTreeEdge> fEdges) {
+        System.out.println("TreeDistance::calculateRatio");
         Ratio ratio = new Ratio();
 
         // add all edges in m equal to minEl to the ratio
@@ -1148,6 +1160,7 @@ public class TreeDistance {
      * @param ratioSeq
      */
     public static void getMaxPathSpacesAsRatioSeqs(Vector<Bipartition> m, RatioSequence ratioSeq, Vector<PhyloTreeEdge> eEdges, Vector<PhyloTreeEdge> fEdges) {
+        System.out.println("TreeDistance::getMaxPathSpacesAsRatioSeqs");
         // returns vector containing each minimal e-set.
         Vector<Bipartition> minEls = getMinElements(m);
         Bipartition minEl;
@@ -1249,7 +1262,8 @@ public class TreeDistance {
      * @param ratioSeq
      */
     public static void getPruned2MaxPathSpacesAsRatioSeqs(Vector<Bipartition> m, RatioSequence ratioSeq, Vector<PhyloTreeEdge> eEdges, Vector<PhyloTreeEdge> fEdges) {
-//		stepForDebugging++;
+		System.out.println("TreeDistance::getPruned2MaxPathSpacesAsRatioSeqs");
+        stepForDebugging++;
 
         // returns vector containing each minimal e-set.
         Vector<Bipartition> minEls = getMinElements(m);
@@ -1382,6 +1396,7 @@ public class TreeDistance {
      * @return
      */
     public static Vector<Integer> binaryToVector(BitSet bin) {
+        System.out.println("TreeDistance::binaryToVector");
         Vector<Integer> v = new Vector<Integer>();
 
         for (int i = 0; i < bin.length(); i++) {
@@ -1403,6 +1418,7 @@ public class TreeDistance {
      * @return
      */
     public static Vector<Bipartition> getMinElements(Vector<Bipartition> m) {
+        System.out.println("TreeDistance::getMinElements");
 //		System.out.println("m is " + m);
         Vector<Bipartition> minEls = new Vector<Bipartition>();
 /*		boolean[] isMinEl = new boolean[m.size()];
@@ -1498,6 +1514,7 @@ public class TreeDistance {
      * @return
      */
     public static Vector<PhyloTreeEdge> deleteZeroEdges(Vector<PhyloTreeEdge> v) {
+        System.out.println("TreeDistance::deleteZeroEdges");
         int k = 0;
         while (k < v.size()) {
 //			System.out.println("v.get(k) is " + v.get(k));
@@ -1511,6 +1528,7 @@ public class TreeDistance {
     }
 
     public static Vector<PhyloTreeEdge> myVectorClonePhyloTreeEdge(Vector<PhyloTreeEdge> v) {
+        System.out.println("TreeDistance::myVectorClonePhyloTreeEdge");
         if (v == null) {
             return null;
         }
@@ -1527,6 +1545,7 @@ public class TreeDistance {
     }
 
     public static Vector<RatioSequence> myVectorCloneRatioSequence(Vector<RatioSequence> v) {
+        System.out.println("TreeDistance::myVectorCloneRatioSequence");
         if (v == null) {
             return null;
         }
@@ -1574,7 +1593,7 @@ public class TreeDistance {
      * @return
      */
     public static Vector<Bipartition> removeMinElFrom(Vector<Bipartition> m, Bipartition minEl) {
-
+        System.out.println("TreeDistance::removeMinElFrom");
         Vector<Bipartition> newM = myVectorCloneBipartition(m);
         // remove the edges in minRatio from m and repeat
         //	 set all edges in m equal to minEl to be null
@@ -1594,6 +1613,7 @@ public class TreeDistance {
     }
 
     public static Vector<String> myVectorCloneString(Vector<String> v) {
+        System.out.println("TreeDistance::myVectorCloneString");
         if (v == null) {
             return null;
         }
@@ -1617,10 +1637,12 @@ public class TreeDistance {
      * @return
      */
     public static double truncate(double d, int p) {
+        System.out.println("TreeDistance::truncate");
         return Math.floor(d * Math.pow(10, p)) / Math.pow(10, p);
     }
 
     public static double round(double d, int p) {
+        System.out.println("TreeDistance::round");
         return ((double) Math.round(d * Math.pow(10, p))) / Math.pow(10, p);
     }
 
@@ -1633,6 +1655,7 @@ public class TreeDistance {
      * @return
      */
     public static PhyloTree[] readInTreesFromFile(String inFileName) throws IOException {
+        System.out.println("TreeDistance::readInTreesFromFile");
         int numTrees = 0;  // count the number of trees read in
         Vector<String> stringTrees = new Vector<String>();
 
@@ -1677,7 +1700,7 @@ public class TreeDistance {
      * Assumes first line of file is number of trees, and then one tree per line.
      */
     public static void computeAllInterTreeGeodesicsFromFile(String inFileName, String outFileName, String algorithm, boolean doubleCheck) throws IOException {
-
+        System.out.println("TreeDistance::computeAllInterTreeGeodesicsFromFile");
 
         PhyloTree[] trees = readInTreesFromFile(inFileName);
         int numTrees = trees.length;
@@ -1729,7 +1752,7 @@ public class TreeDistance {
      * @param alg2
      */
     public static void compareAlgorithms(PhyloTree[] trees, int numTrees, String alg1, String alg2) throws IOException {
-
+        System.out.println("TreeDistance::compareAlgorithms");
         Date startTime, endTime;
         long alg1Time, alg2Time;
         long avgAlg1Time = 0;
@@ -1788,6 +1811,7 @@ public class TreeDistance {
      * Help message (ie. which arguments can be used, etc.)
      */
     public static void displayHelp() {
+        System.out.println("TreeDistance::displayHelp");
         System.out.println("Command line syntax:");
         System.out.println("geodeMAPS [options] treefile");
         System.out.println("Optional arguments:");
@@ -1805,7 +1829,7 @@ public class TreeDistance {
      * @param args
      */
     public static void main(String[] args) {
-
+        System.out.println("TreeDistance::main");
         // variables maybe changed by program arguments
         String algorithm = "dynamic";   //XXX make the defaults be constants
         String treeFile = "";
@@ -1924,6 +1948,7 @@ public class TreeDistance {
 
     // XXX: fix the following three methods!!!  should be able to combine or something...
     public static Vector<Bipartition> myVectorCloneBipartition(Vector<Bipartition> v) {
+        System.out.println("TreeDistance::myVectorCloneBipartition");
         if (v == null) {
             return null;
         }

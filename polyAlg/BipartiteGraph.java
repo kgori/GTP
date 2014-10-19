@@ -42,7 +42,7 @@ public class BipartiteGraph {
     private boolean debug = false;  // set to true to display more output messages
 
     public BipartiteGraph(boolean IncidenceMatrix[][], double Aweight[], double Bweight[]) {
-        System.out.println("BipartiteGraph constructor 1");
+        System.out.println("BipartiteGraph::constructor 1");
         nA = Array.getLength(Aweight);
         nB = Array.getLength(Bweight);
         n = max(nA, nB);
@@ -92,7 +92,7 @@ public class BipartiteGraph {
     }
 
     public int[][] vertex_cover(int[] Aindex, int[] Bindex) {
-        System.out.println("vertex_cover");
+        System.out.println("BipartiteGraph::vertex_cover");
         /**indexA,indexB are the vectors of vertex indices of the subgraph.
          * nAVC, nVC are their cardinality
          * vertex_cover computes the min-normalized-square-weighted vertex cover

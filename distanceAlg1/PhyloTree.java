@@ -39,6 +39,7 @@ public class PhyloTree {
     // assume these trees are already rooted according to convention;
     // this shouldn't be a problem, because we root any tree read in from a string according to convention
     public PhyloTree(Vector<PhyloTreeEdge> edges, Vector<String> leaf2NumMap, EdgeAttribute[] leafEdgeLengths) {
+        System.out.println("PhyloTree::constructor1");
         this.edges = edges;
         this.leaf2NumMap = leaf2NumMap;
         this.leafEdgeAttribs = leafEdgeLengths;
@@ -48,12 +49,14 @@ public class PhyloTree {
     // assume these trees are already rooted according to convention;
     // this shouldn't be a problem, because we root any tree read in from a string according to convention
     public PhyloTree(Vector<PhyloTreeEdge> edges, Vector<String> leaf2NumMap) {
+        System.out.println("PhyloTree::constructor2");
         this.edges = edges;
         this.leaf2NumMap = leaf2NumMap;
     }
 
     // copy constructor
     public PhyloTree(PhyloTree t) {
+        System.out.println("PhyloTree::constructor3");
         this.edges = Tools.myVectorClonePhyloTreeEdge(t.edges);
         this.leaf2NumMap = Tools.myVectorCloneString(t.leaf2NumMap);
         if (t.leafEdgeAttribs != null) {
@@ -66,6 +69,7 @@ public class PhyloTree {
 
 
     private void setLeaf2NumMapFromNewick() {
+        System.out.println("PhyloTree::setLeaf2NumMapFromNewick");
         // go through the string and pull out all the leaf labels:  any string between '(' and ':' or ',' and ':'
         int i = 0;
         while (i < newick.length()) {
@@ -96,6 +100,7 @@ public class PhyloTree {
      * @param t representation of a tree in Newick standard.
      */
     public PhyloTree(String t, boolean rooted) throws StringIndexOutOfBoundsException {
+        System.out.println("PhyloTree::constructor4");
         int leafNum = 0;
 
         LinkedList<PhyloTreeEdge> queue = new LinkedList<PhyloTreeEdge>();   // queue for keeping track of edges we are still adding leaves to
@@ -222,6 +227,7 @@ public class PhyloTree {
 
     // Getters and Setters
     public Vector<PhyloTreeEdge> getEdges() {
+        System.out.println("PhyloTree::getEdges");
         return edges;
     }
 
@@ -232,19 +238,23 @@ public class PhyloTree {
      * @return
      */
     public PhyloTreeEdge getEdge(int i) {
+        System.out.println("PhyloTree::getEdge");
         return edges.get(i);
     }
 
     public void setEdges(Vector<PhyloTreeEdge> edges) {
+        System.out.println("PhyloTree::setEdges");
         this.edges = edges;
     }
 
 
     public Vector<String> getLeaf2NumMap() {
+        System.out.println("PhyloTree::getLeaf2NumMap");
         return leaf2NumMap;
     }
 
     public EdgeAttribute getAttribOfSplit(Bipartition edge) {
+        System.out.println("PhyloTree::getAttribOfSplit");
         Iterator<PhyloTreeEdge> edgesIter = edges.iterator();
         while (edgesIter.hasNext()) {
             PhyloTreeEdge e = (PhyloTreeEdge) edgesIter.next();
@@ -261,6 +271,7 @@ public class PhyloTree {
      * @return
      */
     public Vector<Bipartition> getSplits() {
+        System.out.println("PhyloTree::getSplits");
         Vector<Bipartition> splits = new Vector<Bipartition>();
 
         for (int i = 0; i < edges.size(); i++) {
@@ -275,11 +286,13 @@ public class PhyloTree {
      *
      */
     public void normalize() {
+        System.out.println("PhyloTree::normalize v1");
         double vecLength = getDistanceFromOrigin();
         normalize(vecLength);
     }
 
     private void normalize(double constant) {
+        System.out.println("PhyloTree::normalize v2");
         // divide by the length of the split length vector to normalize
         for (int i = 0; i < leafEdgeAttribs.length; i++) {
             leafEdgeAttribs[i].scaleBy(1.0 / constant);
@@ -290,16 +303,19 @@ public class PhyloTree {
     }
 
     public void normalize(PhyloTree other) {
+        System.out.println("PhyloTree::normalize v3");
         double combinedVecLength = getDistanceFromOrigin() + other.getDistanceFromOrigin();
         normalize(combinedVecLength);
         other.normalize(combinedVecLength);
     }
 
     public int numLeaves() {
+        System.out.println("PhyloTree::numLeaves");
         return leaf2NumMap.size();
     }
 
     public void setLeaf2NumMap(Vector<String> leaf2NumMap) {
+        System.out.println("PhyloTree::setLeaf2NumMap");
         this.leaf2NumMap = leaf2NumMap;
     }
 
@@ -310,6 +326,7 @@ public class PhyloTree {
      * @return
      */
     public double getDistanceFromOrigin() {
+        System.out.println("PhyloTree::getDistanceFromOrigin");
         double dist = 0;
         for (int i = 0; i < edges.size(); i++) {
             dist = dist + Math.pow(edges.get(i).getLength(), 2);
@@ -328,6 +345,7 @@ public class PhyloTree {
      * @return
      */
     public double getDistanceFromOriginNoLeaves() {
+        System.out.println("PhyloTree::getDistanceFromOriginNoLeaves");
         double dist = 0;
         for (int i = 0; i < edges.size(); i++) {
             dist = dist + Math.pow(edges.get(i).getLength(), 2);
@@ -340,6 +358,7 @@ public class PhyloTree {
      * Returns the sum of the tree's edge lengths
      */
     public double getBranchLengthSum() {
+        System.out.println("PhyloTree::getBranchLengthSum");
         double sum = 0;
         for (int i = 0; i < edges.size(); i++) {
             sum += edges.get(i).getLength();
@@ -368,6 +387,7 @@ public class PhyloTree {
      * @return
      */
     public static Vector<PhyloTreeEdge> getCommonEdges(PhyloTree t1, PhyloTree t2) {
+        System.out.println("PhyloTree::getCommonEdges");
         Vector<PhyloTreeEdge> commonEdges = new Vector<PhyloTreeEdge>();
 
         // if the two trees do not have the same leaf2NumMap
@@ -412,6 +432,7 @@ public class PhyloTree {
      * @return
      */
     public Vector<PhyloTreeEdge> getEdgesNotInCommonWith(PhyloTree t) {
+        System.out.println("PhyloTree::getEdgesNotInCommonWith");
         Vector<PhyloTreeEdge> notCommonEdges = new Vector<PhyloTreeEdge>();
 
         // if the two trees do not have the same leaf2NumMap
@@ -443,6 +464,7 @@ public class PhyloTree {
 
 
     public void permuteLeaves() {
+        System.out.println("PhyloTree::permuteLeaves v1");
         Vector<PhyloTreeEdge> v = this.edges;
         int numEdges = v.size();
         int numLeaves = numEdges + 2;  // because assuming trees are rooted, or have been rooted
@@ -482,6 +504,7 @@ public class PhyloTree {
     }
 
     public void permuteLeaves(int[] permutation) {
+        System.out.println("PhyloTree::permuteLeaves v2");
         Vector<PhyloTreeEdge> v = this.edges;
         int numEdges = v.size();
 
@@ -505,6 +528,7 @@ public class PhyloTree {
     }
 
     public void swapleaves(int l1, int l2) {
+        System.out.println("PhyloTree::swapleaves");
         Vector<PhyloTreeEdge> v = this.edges;
         int numEdges = v.size();
 
@@ -551,6 +575,7 @@ public class PhyloTree {
      * @param e
      */
     public boolean removeSplit(Bipartition e) {
+        System.out.println("PhyloTree::removeSplit");
         boolean removed = false;
 
         for (int i = 0; i < edges.size(); i++) {
@@ -567,6 +592,7 @@ public class PhyloTree {
      * Remove the edges with bipartitions corresponding to those in Vector<Bipartitions>
      */
     public void removeSplits(Vector<Bipartition> splits) {
+        System.out.println("PhyloTree::removeSplits");
         for (int i = 0; i < splits.size(); i++) {
             this.removeSplit(splits.get(i));
         }
@@ -578,6 +604,7 @@ public class PhyloTree {
      * @param v
      */
     public void removeEdgesIndicatedByOnes(Bipartition v) {
+        System.out.println("PhyloTree::removeEdgesIndicatedByOnes");
         int numRemovedSoFar = 0;
         for (int i = 0; i < leaf2NumMap.size() - 2; i++) {
             if (v.contains(i)) {
@@ -593,6 +620,7 @@ public class PhyloTree {
      * @param e
      */
     public void addEdge(PhyloTreeEdge e) {
+        System.out.println("PhyloTree::addEdge");
         edges.add(e);
     }
 
@@ -604,6 +632,7 @@ public class PhyloTree {
      * @return t.length() if no character in s is located after position i in t; otherwise return the min index
      */
     public static int nextIndex(String t, int i, String s) {
+        System.out.println("PhyloTree::nextIndex");
         int minIndex = t.length();
         int tempIndex = -1;
 
@@ -628,6 +657,7 @@ public class PhyloTree {
      * @return
      */
     public Vector<Bipartition> getCrossingsWith(PhyloTree t) {
+        System.out.println("PhyloTree::getCrossingsWith");
         // if the two trees do not have the same leaf2NumMap
         if (!(this.getLeaf2NumMap().equals(t.getLeaf2NumMap()))) {
             return null;
@@ -680,18 +710,21 @@ public class PhyloTree {
     }
 
     public String toString() {
+        System.out.println("PhyloTree::toString");
         return "Leaves: " + leaf2NumMap + "; edges: " + edges + "; leaf edges: " + Arrays.toString(leafEdgeAttribs);
     }
 
 
     // TODO:  not actually overriding the object clone method.  Also, clone should not call constructors.
     public PhyloTree clone() {
+        System.out.println("PhyloTree::clone");
         return new PhyloTree(TreeDistance.myVectorClonePhyloTreeEdge(edges), TreeDistance.myVectorCloneString(leaf2NumMap), leafEdgeAttribs.clone());
     }
 
     // TODO:  currently does not check equality of internal edges
     @Override
     public boolean equals(Object t) {
+        System.out.println("PhyloTree::equals");
         if (t == null) {
             return false;
         }
@@ -720,6 +753,7 @@ public class PhyloTree {
      * @return
      */
     public boolean approxEquals(PhyloTree t, Double epsilon) throws IOException {
+        System.out.println("PhyloTree::approxEquals");
         if (this == null || t == null) {
             return false;
         }
@@ -729,6 +763,7 @@ public class PhyloTree {
 
     // XXX for now this is the testing procedure
     public static void main(String args[]) {
+        System.out.println("PhyloTree::main");
         PhyloTree t1 = new PhyloTree("((A:0.1,B:0.2):1,(C:0.3,D:0.4):2)", true);
         // should produce:  [1.0 11, 2.0 1100]
         System.out.println("Edges of tree 1 (length, followed by leaves as 1's): " + t1.getEdges().toString());
@@ -761,10 +796,12 @@ public class PhyloTree {
     }
 
     public EdgeAttribute[] getLeafEdgeAttribs() {
+        System.out.println("PhyloTree::getLeafEdgeAttribs");
         return leafEdgeAttribs;
     }
 
     public EdgeAttribute[] getCopyLeafEdgeAttribs() {
+        System.out.println("PhyloTree::getCopyLeafEdgeAttribs");
         if (leafEdgeAttribs == null) {
             return null;
         }
@@ -784,6 +821,7 @@ public class PhyloTree {
      * @return
      */
     public double[] getIntEdgeAttribNorms() {
+        System.out.println("PhyloTree::getIntEdgeAttribNorms");
         double[] norms = new double[edges.size()];
 
         for (int i = 0; i < edges.size(); i++) {
@@ -793,10 +831,12 @@ public class PhyloTree {
     }
 
     public void setLeafEdgeAttribs(EdgeAttribute[] leafEdgeAttribs) {
+        System.out.println("PhyloTree::setLeafEdgeAttribs");
         this.leafEdgeAttribs = leafEdgeAttribs;
     }
 
     public String getNewick(boolean branchLengths) {
+        System.out.println("PhyloTree::getNewick");
         String newNewick = "";
         Vector<String> strPieces = new Vector<String>();    // stores the pieces of the Newick format constructed so far
         Vector<PhyloTreeEdge> corrEdges = new Vector<PhyloTreeEdge>();    // stores the top split for each piece of Newick constructed so far
@@ -921,6 +961,7 @@ public class PhyloTree {
     }
 
     public void setNewick(String newick) {
+        System.out.println("PhyloTree::setNewick");
         this.newick = newick;
     }
 
@@ -930,6 +971,7 @@ public class PhyloTree {
      * @return
      */
     public int numEdges() {
+        System.out.println("PhyloTree::numEdges");
         return edges.size();
     }
 
@@ -942,6 +984,7 @@ public class PhyloTree {
      * @return
      */
     public PhyloTree projectToGeo(PhyloTree t1, PhyloTree t2, double epsilon) throws IOException {
+        System.out.println("PhyloTree::projectToGeo");
         double rightIndex = 1;
         double leftIndex = 0;
         double middleIndex = 0.5;

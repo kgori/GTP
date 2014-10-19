@@ -32,17 +32,17 @@ public class Tools {
      * @return
      */
     public static double truncate(double d, int p) {
-        System.out.println("truncate");
+        System.out.println("Tools::truncate");
         return Math.floor(d * Math.pow(10, p)) / Math.pow(10, p);
     }
 
     public static double round(double d, int p) {
-        System.out.println("round");
+        System.out.println("Tools::round");
         return ((double) Math.round(d * Math.pow(10, p))) / Math.pow(10, p);
     }
 
     public static boolean[][] getIncidenceMatrix(Vector<PhyloTreeEdge> edges1, Vector<PhyloTreeEdge> edges2) {
-        System.out.println("getIncidenceMatrix");
+        System.out.println("Tools::getIncidenceMatrix");
         boolean[][] incidenceMatrix = new boolean[edges1.size()][edges2.size()];
 
         for (int i = 0; i < edges1.size(); i++) {
@@ -59,7 +59,7 @@ public class Tools {
     }
 
     public static Vector<PhyloTreeEdge> myVectorClonePhyloTreeEdge(Vector<PhyloTreeEdge> v) {
-        System.out.println("myVectorClonePhyloTreeEdge");
+        System.out.println("Tools::myVectorClonePhyloTreeEdge");
         if (v == null) {
             return null;
         }
@@ -76,7 +76,7 @@ public class Tools {
     }
 
     public static Vector<RatioSequence> myVectorCloneRatioSequence(Vector<RatioSequence> v) {
-        System.out.println("myVectorCloneRatioSequence");
+        System.out.println("Tools::myVectorCloneRatioSequence");
         if (v == null) {
             return null;
         }
@@ -93,7 +93,7 @@ public class Tools {
     }
 
     public static Vector<String> myVectorCloneString(Vector<String> v) {
-        System.out.println("myVectorCloneString");
+        System.out.println("Tools::myVectorCloneString");
         if (v == null) {
             return null;
         }
@@ -116,7 +116,7 @@ public class Tools {
      * @return
      */
     public static Vector<PhyloTreeEdge> deleteEmptyEdges(Vector<PhyloTreeEdge> v) {
-        System.out.println("deleteEmptyEdges");
+        System.out.println("Tools::deleteEmptyEdges");
         int k = 0;
         while (k < v.size()) {
 //			System.out.println("v.get(k) is " + v.get(k));

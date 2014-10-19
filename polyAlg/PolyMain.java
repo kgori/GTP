@@ -59,7 +59,7 @@ public class PolyMain {
      * Thus we will not get any more subtree pairs with disjoint leaves, and should return.
      */
     public static void splitOnCommonEdge(PhyloTree t1, PhyloTree t2) {
-        System.out.println("splitOnCommonEdge");
+        System.out.println("PhyloTree::splitOnCommonEdge");
         int numEdges1 = t1.getEdges().size(); // number of edges in tree 1
         int numEdges2 = t2.getEdges().size(); /// number of edges in tree 2
 
@@ -206,7 +206,7 @@ public class PolyMain {
      * @return
      */
     public static PhyloTree[] readInTreesFromFile(String inFileName, boolean rooted) throws IOException, UnsupportedOperationException {
-        System.out.println("readInTreesFromFile");
+        System.out.println("PhyloTree::readInTreesFromFile");
         int numTrees = 0;  // count the number of trees read in
         boolean nexus = false;
         Vector<String> stringTrees = new Vector<String>();
@@ -324,7 +324,7 @@ public class PolyMain {
     }
 
     public static double getRobinsonFouldsDistance(PhyloTree tree1, PhyloTree tree2, boolean normalize) {
-        System.out.println("getRobinsonFouldsDistance");
+        System.out.println("PhyloTree::getRobinsonFouldsDistance");
         Vector<PhyloTreeEdge> enic = tree1.getEdgesNotInCommonWith(tree2);
         enic.addAll(tree2.getEdgesNotInCommonWith(tree1));
         double rf_value = enic.size();
@@ -333,7 +333,7 @@ public class PolyMain {
     }
 
     public static double getWeightedRobinsonFouldsDistance(PhyloTree tree1, PhyloTree tree2, boolean normalize) {
-        System.out.println("getWeightedRobinsonFouldsDistance");
+        System.out.println("PhyloTree::getWeightedRobinsonFouldsDistance");
         double wrf_value = 0;
 
         // Collect edges-in-common and edges-not-in-common...
@@ -363,7 +363,7 @@ public class PolyMain {
     }
 
     public static double getEuclideanDistance(PhyloTree tree1, PhyloTree tree2, boolean normalize) {
-        System.out.println("getEuclideanDistance");
+        System.out.println("PhyloTree::getEuclideanDistance");
         double euc_value = 0;
 
         // Collect edges-in-common and edges-not-in-common...
@@ -393,6 +393,7 @@ public class PolyMain {
     }
 
     public static double getGeodesicDistance(PhyloTree tree1, PhyloTree tree2, boolean normalize) throws IOException {
+        System.out.println("PhyloTree::getGeodesicDistance");
         double distance = getGeodesic(tree1, tree2, null).getDist();
         if (normalize) return distance / (tree1.getDistanceFromOrigin() + tree2.getDistanceFromOrigin());
         return distance;
@@ -406,7 +407,7 @@ public class PolyMain {
      * XXX: how to deal with multifurcating trees
      */
     public static Geodesic getGeodesic(PhyloTree t1, PhyloTree t2, String geoFile) throws IOException {
-        System.out.println("getGeodesic");
+        System.out.println("PhyloTree::getGeodesic");
         double leafContributionSquared = 0;
         EdgeAttribute[] t1LeafEdgeAttribs = t1.getLeafEdgeAttribs();
         EdgeAttribute[] t2LeafEdgeAttribs = t2.getLeafEdgeAttribs();
@@ -565,7 +566,7 @@ public class PolyMain {
      * Returns:  a Geodesic with just the ratio sequence set
      */
     public static Geodesic getGeodesicNoCommonEdges(PhyloTree t1, PhyloTree t2) {
-        System.out.println("getGeodesicNoCommonEdges");
+        System.out.println("PhyloTree::getGeodesicNoCommonEdges");
         int numEdges1 = t1.getEdges().size(); // number of edges in tree 1
         int numEdges2 = t2.getEdges().size(); // number of edges in tree 2
         RatioSequence rs = new RatioSequence();
@@ -676,7 +677,7 @@ public class PolyMain {
      * @return
      */
     public static Geodesic[][] getAllInterTreeGeodesics(PhyloTree[] trees, boolean doubleCheck) throws IOException {
-        System.out.println("getAllInterTreeGeodesics");
+        System.out.println("PhyloTree::getAllInterTreeGeodesics");
         Date startTime;
         Date endTime;
         int numTrees = trees.length;
@@ -749,7 +750,7 @@ public class PolyMain {
      * Assumes first line of file is number of trees, and then one tree per line.
      */
     public static void computeAllInterTreeGeodesicsFromFile(String inFileName, String outFileName, boolean doubleCheck, boolean rooted) throws IOException {
-        System.out.println("computeAllInterTreeGeodesicsFromFile");
+        System.out.println("PhyloTree::computeAllInterTreeGeodesicsFromFile");
 
         PhyloTree[] trees = readInTreesFromFile(inFileName, rooted);
         int numTrees = trees.length;
@@ -786,7 +787,7 @@ public class PolyMain {
     }
 
     public static Geodesic[] getAllRowGeodesics(PhyloTree[] trees, int row) throws IOException {
-        System.out.println("getAllRowGeodesics");
+        System.out.println("PhyloTree::getAllRowGeodesics");
         int numTrees = trees.length;
         double[] dists = new double[numTrees];
         Geodesic[] geos = new Geodesic[numTrees];
@@ -801,7 +802,7 @@ public class PolyMain {
     }
 
     public static void computeAllRowGeodesicsFromFile(String inFileName, String outFileName, boolean rooted, int row) throws IOException, IndexOutOfBoundsException {
-        System.out.println("computeAllRowGeodesicsFromFile");
+        System.out.println("PhyloTree::computeAllRowGeodesicsFromFile");
         PhyloTree[] trees = readInTreesFromFile(inFileName, rooted);
         int numTrees = trees.length;
         if (verbose >= 1) {
@@ -837,7 +838,7 @@ public class PolyMain {
      * Help message (ie. which arguments can be used, etc.)
      */
     public static void displayHelp() {
-        System.out.println();
+        System.out.println("PhyloTree::displayHelp");
         System.out.println("Command line syntax:");
         System.out.println("gtp [options] treefile");
         System.out.println("Optional arguments:");
@@ -855,7 +856,7 @@ public class PolyMain {
      * @param args
      */
     public static void main(String[] args) throws IOException {
-        System.out.println();
+        System.out.println("PhyloTree::main");
         String s1 = "(a:1,(b:2,(c:3,d:4):5):6);";
         PhyloTree t2 = new PhyloTree("(c:1,(b:2,(d:3,a:4):5):6);", false);
         PhyloTree t1 = new PhyloTree(s1, false);
@@ -873,7 +874,7 @@ public class PolyMain {
      * @param outFile
      */
     public static PhyloTree getMinLabelling(PhyloTree tree1, PhyloTree tree2, String outFile) throws IOException {
-        System.out.println();
+        System.out.println("PhyloTree::getMinLabelling");
         int numIter = 100;
         double potentialGeo;
         PhyloTree potentialTree;

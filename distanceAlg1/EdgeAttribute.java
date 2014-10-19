@@ -9,14 +9,17 @@ public class EdgeAttribute {
     public static final double TOLERANCE = 0.000000000000001;  // compares double values up to TOLERANCE (currently 15 decimal places)
 
     public EdgeAttribute() {
+        System.out.println("EdgeAttribute::constructor 1");
         this.vect = null;
     }
 
     public EdgeAttribute(double[] vect) {
+        System.out.println("EdgeAttribute::constructor 2");
         this.vect = vect;
     }
 
     public EdgeAttribute(String s) throws NumberFormatException {
+        System.out.println("EdgeAttribute::constructor 3");
         try {
             // if s is a vector
             if ((s.charAt(0) == '[') && (s.charAt(s.length() - 1) == ']')) {
@@ -44,6 +47,7 @@ public class EdgeAttribute {
 
 
     public double getAttribute() {
+        System.out.println("EdgeAttribute::getAttribute");
         if (vect == null) {
             return 0;
         }
@@ -51,14 +55,17 @@ public class EdgeAttribute {
     }
 
     public void setEdgeAttribute(EdgeAttribute attrib) {
+        System.out.println("EdgeAttribute::setEdgeAttribute");
         this.vect = attrib.vect;
     }
 
     public EdgeAttribute clone() {
+        System.out.println("EdgeAttribute::clone");
         return new EdgeAttribute(Arrays.copyOf(vect, vect.length));
     }
 
     public String toString() {
+        System.out.println("EdgeAttribute::toString");
         if (vect == null) {
             return "";
         }
@@ -79,6 +86,7 @@ public class EdgeAttribute {
     // TODO:  only set up to handle the attribute being a vector
     @Override
     public boolean equals(Object e) {
+        System.out.println("EdgeAttribute::equals");
         if (e == null) {
             return false;
         }
@@ -107,6 +115,7 @@ public class EdgeAttribute {
      * @return
      */
     public double norm() {
+        System.out.println("EdgeAttribute::norm");
         if (vect == null) {
             return 0.0;
         }
@@ -129,6 +138,7 @@ public class EdgeAttribute {
      * @return
      */
     public static EdgeAttribute difference(EdgeAttribute a1, EdgeAttribute a2) {
+        System.out.println("EdgeAttribute::difference");
         if (a1 == null && a2 == null) {
             System.out.println("Calculating difference between two null edge attributes; returning null");
             return null;
@@ -173,6 +183,7 @@ public class EdgeAttribute {
      * @param a2
      */
     public static EdgeAttribute add(EdgeAttribute a1, EdgeAttribute a2) {
+        System.out.println("EdgeAttribute::add");
         if (a1.vect == null) {
             return a2;
         }
@@ -211,6 +222,7 @@ public class EdgeAttribute {
      * @return
      */
     public static EdgeAttribute weightedPairAverage(EdgeAttribute start, EdgeAttribute target, double position) {
+        System.out.println("EdgeAttribute::weightedPairAverage");
         if (start == null && target == null) {
             System.out.println("Calculating point between two null edge attributes; returning null");
             return null;
@@ -252,6 +264,7 @@ public class EdgeAttribute {
      * @param s
      */
     public void scaleBy(double a) {
+        System.out.println("EdgeAttribute::scaleBy");
         for (int i = 0; i < vect.length; i++) {
             vect[i] = vect[i] * a;
         }
@@ -264,6 +277,7 @@ public class EdgeAttribute {
      * @return
      */
     public int size() {
+        System.out.println("EdgeAttribute::size");
         if (vect == null) {
             return 0;
         }
@@ -274,6 +288,7 @@ public class EdgeAttribute {
      * If vect has length 1, make sure it is positive.
      */
     public void ensurePositive() {
+        System.out.println("EdgeAttribute::ensurePositive");
         if (vect.length == 1) {
             vect[0] = Math.abs(vect[0]);
         }
@@ -287,6 +302,7 @@ public class EdgeAttribute {
      * @return
      */
     public static EdgeAttribute zeroAttribute(int size) {
+        System.out.println("EdgeAttribute::zeroAttribute");
         if (size < 1) {
             System.err.println("Error creating zero edge attribute of size " + size + "; invalid size");
             throw new RuntimeException();
