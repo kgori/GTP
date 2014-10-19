@@ -5,6 +5,8 @@
 #include <string>
 #include <unorderedmap>
 #include "Bipartition.h"
+#include "Geodesic.h"
+#include "Ratio.h"
 
 using namespace std;
 

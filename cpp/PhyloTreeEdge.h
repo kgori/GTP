@@ -1,9 +1,9 @@
 #ifndef __PHYLOTREE_EDGE_H__
 #define __PHYLOTREE_EDGE_H__
 
-#include <vector>
-#include <string>
 #include <bitset>
+#include <string>
+#include <vector>
 #include "Bipartition"
 
 using namespace std;

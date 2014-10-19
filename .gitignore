@@ -8,6 +8,8 @@
 # IntelliJ IDE
 *.iml
 .idea/*
+*/.idea/*
+
 
 output.txt
 gtp.jar

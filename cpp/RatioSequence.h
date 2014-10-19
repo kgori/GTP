@@ -1,8 +1,8 @@
 #ifndef __RATIO_SEQUENCE_H__
 #define __RATIO_SEQUENCE_H__
 
-#include <vector>
 #include <string>
+#include <vector>
 
 using namespace std;
 

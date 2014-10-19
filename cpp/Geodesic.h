@@ -3,6 +3,8 @@
 
 #include <string>
 #include <vector>
+#include "PhyloTree.h"
+#include "PhyloTreeEdge.h"
 
 using namespace std;
 

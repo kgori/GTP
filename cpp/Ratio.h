@@ -3,6 +3,8 @@
 
 #include <string>
 #include <vector>
+#include "PhyloTreeEdge.h"
+#include "Bipartition.h"
 
 using namespace std;
 

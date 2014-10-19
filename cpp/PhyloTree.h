@@ -1,8 +1,11 @@
 #ifndef __PHYLOTREE_H__
 #define __PHYLOTREE_H__
 
-#include <vector>
 #include <string>
+#include <vector>
+#include "Bipartition.h"
+#include "EdgeAttribute.h"
+#include "PhyloTreeEdge.h"
 
 using namespace std;
 
