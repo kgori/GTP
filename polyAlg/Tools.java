@@ -32,14 +32,17 @@ public class Tools {
      * @return
      */
     public static double truncate(double d, int p) {
+        System.out.println("truncate");
         return Math.floor(d * Math.pow(10, p)) / Math.pow(10, p);
     }
 
     public static double round(double d, int p) {
+        System.out.println("round");
         return ((double) Math.round(d * Math.pow(10, p))) / Math.pow(10, p);
     }
 
     public static boolean[][] getIncidenceMatrix(Vector<PhyloTreeEdge> edges1, Vector<PhyloTreeEdge> edges2) {
+        System.out.println("getIncidenceMatrix");
         boolean[][] incidenceMatrix = new boolean[edges1.size()][edges2.size()];
 
         for (int i = 0; i < edges1.size(); i++) {
@@ -56,6 +59,7 @@ public class Tools {
     }
 
     public static Vector<PhyloTreeEdge> myVectorClonePhyloTreeEdge(Vector<PhyloTreeEdge> v) {
+        System.out.println("myVectorClonePhyloTreeEdge");
         if (v == null) {
             return null;
         }
@@ -72,6 +76,7 @@ public class Tools {
     }
 
     public static Vector<RatioSequence> myVectorCloneRatioSequence(Vector<RatioSequence> v) {
+        System.out.println("myVectorCloneRatioSequence");
         if (v == null) {
             return null;
         }
@@ -88,6 +93,7 @@ public class Tools {
     }
 
     public static Vector<String> myVectorCloneString(Vector<String> v) {
+        System.out.println("myVectorCloneString");
         if (v == null) {
             return null;
         }
@@ -110,6 +116,7 @@ public class Tools {
      * @return
      */
     public static Vector<PhyloTreeEdge> deleteEmptyEdges(Vector<PhyloTreeEdge> v) {
+        System.out.println("deleteEmptyEdges");
         int k = 0;
         while (k < v.size()) {
 //			System.out.println("v.get(k) is " + v.get(k));

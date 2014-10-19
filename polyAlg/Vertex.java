@@ -25,6 +25,7 @@ public class Vertex {
     public int pred; //-1 = unscanned, otherwise predecessor
 
     public Vertex(double weight) {
+    	System.out.println("Vertex constructor");
         this.weight = weight * weight;
     }
 
